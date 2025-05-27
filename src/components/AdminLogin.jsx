@@ -43,8 +43,16 @@ function AdminLogin() {
     form.resetFields();
   };
   return (
-    <div className="center-container" style={{ minHeight: "100vh" }}>
-      <Card style={{ height: "100%", padding: 32 }}>
+    <div className="center-container" style={{ height: "100vh" }}>
+      <Card
+        className="styled-card"
+        style={{
+          padding: 32,
+          minWidth: 350,
+          maxWidth: 400,
+          margin: "0 auto",
+        }}
+      >
         {showResult ? (
           <Result
             status="error"
@@ -58,7 +66,11 @@ function AdminLogin() {
           />
         ) : (
           <>
-            <Title level={3} className="form-title">
+            <Title
+              level={3}
+              className="form-title"
+              style={{ marginBottom: 32 }}
+            >
               Admin Login
             </Title>
             <Form
@@ -74,7 +86,7 @@ function AdminLogin() {
                   { required: true, message: "Please Enter Your Username" },
                 ]}
               >
-                <Input placeholder="Enter your username" />
+                <Input placeholder="Enter your username" size="large" />
               </FormItem>
               <FormItem
                 label="Password"
@@ -83,20 +95,27 @@ function AdminLogin() {
                   { required: true, message: "Please Enter Your Password" },
                 ]}
               >
-                <Input.Password placeholder="Enter your password" />
+                <Input.Password
+                  placeholder="Enter your password"
+                  size="large"
+                />
               </FormItem>
               <FormItem>
                 <Button
                   htmlType="submit"
                   type="primary"
                   className="full-width-btn"
+                  size="large"
+                  style={{ marginTop: 8 }}
                 >
                   Login
                 </Button>
               </FormItem>
-              <p style={{ textAlign: "center" }}>
-                <Link to="/">User?</Link>
-              </p>
+              <div style={{ textAlign: "center", marginTop: 8 }}>
+                <Link to="/" style={{ color: "#1677ff", fontWeight: 500 }}>
+                  User?
+                </Link>
+              </div>
             </Form>
           </>
         )}

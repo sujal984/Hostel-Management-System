@@ -143,15 +143,13 @@ function AdminDashboard() {
 
   const handleLogout = () => {
     localStorage.removeItem("admin_logged_in");
-    navigate("/Admin/login");
+    setTimeout(() => {
+      navigate("/Admin/login", { replace: true });
+    }, 100);
   };
 
   return (
     <div style={{ padding: 24 }}>
-      {/* <Card
-        className="styled-card"
-        style={{ padding: 24, position: "relative" }}
-      > */}
       <div
         style={{
           position: "absolute",
@@ -245,7 +243,8 @@ function AdminDashboard() {
                     placeholder="Remarks"
                     value={remark}
                     onChange={(e) => setRemark(e.target.value)}
-                    disabled={selectedRoomId !== null}
+                    // Enable input always
+                    disabled={false}
                   />
                   <div style={{ display: "flex", gap: 16, marginTop: 16 }}>
                     <Button
@@ -266,7 +265,7 @@ function AdminDashboard() {
                         updateStatus("Rejected");
                         handleSubmit(false);
                       }}
-                      disabled={selectedRoomId !== null}
+                      disabled={!!selectedRoomId}
                     >
                       Reject
                     </Button>
@@ -277,7 +276,6 @@ function AdminDashboard() {
           </Descriptions>
         )}
       </Modal>
-      {/* </Card> */}
     </div>
   );
 }
