@@ -1,0 +1,82 @@
+/* Global Styles */
+
+
+.center-container {
+    /* min-height: 75vh; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f5f7fa;
+    padding: 24px;
+
+    height: 100%;
+}
+
+/* .styled-card {
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+    background: #fff;
+    height: fit-content;
+    width: auto;
+    padding: 14px;
+    margin: 16px 0;
+
+} */
+
+
+.responsive-form {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.form-title {
+    margin-top: 1rem;
+    text-align: center;
+    margin-bottom: 24px !important;
+}
+
+.full-width-btn {
+    width: 100%;
+}
+
+.responsive-table {
+    overflow-x: auto;
+}
+
+.table-actions {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    margin-top: 8px;
+}
+
+@media (max-width: 768px) {
+    .ant-col {
+        padding: 0 8px !important;
+    }
+
+    .styled-card {
+        margin: 16px 0;
+    }
+
+    .ant-table-thead>tr>th,
+    .ant-table-tbody>tr>td {
+        padding: 12px !important;
+    }
+}
+
+/* Form Steps */
+.step-indicator {
+    margin-bottom: 32px;
+    text-align: center;
+}
+
+/* Application Status */
+.status-result {
+    min-height: 60px;
+    text-align: center;
+    margin-top: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
