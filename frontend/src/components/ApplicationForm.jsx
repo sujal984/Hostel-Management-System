@@ -263,7 +263,7 @@ function ApplicationForm() {
                     <Form.Item label="Degree" name="degree">
                       <Select
                         defaultValue="Select Degree"
-                        style={{ width: "auto" }}
+                        style={{ width: "contentFit" }}
                         // onChange={handleChange}
                         options={[
                           { value: "bachelour", label: "Bachelour" },
