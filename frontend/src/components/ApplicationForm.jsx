@@ -68,7 +68,10 @@ function ApplicationForm() {
         ...filteredValues
       } = { ...values1, ...values2, ...values3 };
       const payload = { ...filteredFormData, ...filteredValues };
-      await axios.post("http://localhost:8000/submit-application/", payload);
+      await axios.post(
+        `${import.meta.env.VITE_API_URL}/submit-application/`,
+        payload
+      );
       message.success("Application Submitted successfully");
       setShowResult("success");
     } catch (error) {

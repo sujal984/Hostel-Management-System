@@ -21,10 +21,13 @@ function AdminLogin() {
   }, [navigate]);
   const handleLogin = async (values) => {
     try {
-      const response = await axios.post("http://localhost:8000/login/", {
-        User_Name: values.User_Name,
-        Password: values.Password,
-      });
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/login/`,
+        {
+          User_Name: values.User_Name,
+          Password: values.Password,
+        }
+      );
       if (response.data && response.data.message === "Login successful") {
         message.success("Login successful");
         localStorage.setItem("admin_logged_in", "true");

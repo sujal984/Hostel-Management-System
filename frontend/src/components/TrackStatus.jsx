@@ -1,7 +1,8 @@
 import { AudioOutlined } from "@ant-design/icons";
-import { Input, Card, Typography, Row, Col } from "antd";
+import { Input, Card, Typography, Row, Col, Button } from "antd";
 import axios from "axios";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const { Search } = Input;
 const { Title, Text } = Typography;
@@ -9,6 +10,7 @@ const { Title, Text } = Typography;
 function TrackStatus() {
   const [statusColor, setStatusColor] = useState("success");
   const [result, setResult] = useState(null);
+  const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
 
@@ -22,7 +24,7 @@ function TrackStatus() {
     try {
       // Determine if the input is an email or a number
 
-      const response = await axios.get("http://localhost:8000/get-status/", {
+      const response = await axios.get("${process.env.APP_URL}/get-status/", {
         params: isEmail ? { email: value } : { number: value },
       });
       if (
@@ -91,6 +93,14 @@ function TrackStatus() {
               </Text>
             )}
           </div>
+          <Button
+            type="primary"
+            style={{ textAlign: "center", marginLeft: "9rem" }}
+            onClick={() => navigate("/")}
+          >
+            {" "}
+            Back home
+          </Button>
         </Card>
       </Col>
     </Row>

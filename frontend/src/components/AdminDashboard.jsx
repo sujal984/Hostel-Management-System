@@ -32,7 +32,9 @@ function AdminDashboard() {
     setSelectedRoomId(null);
     setRemark("");
     try {
-      const res = await axios.get("http://localhost:8000/available-rooms/");
+      const res = await axios.get(
+        `${import.meta.env.VITE_API_URL}/available-rooms/`
+      );
       setRooms(res.data.rooms);
     } catch (err) {
       message.error("Failed to fetch rooms");
@@ -45,7 +47,7 @@ function AdminDashboard() {
     setLoading(true);
     try {
       const response = await axios.get(
-        "http://localhost:8000/fetch-applications/"
+        `${import.meta.env.VITE_API_URL}/fetch-applications/`
       );
       if (response.data && response.data.applications) {
         setApplications(response.data.applications);
@@ -125,10 +127,15 @@ function AdminDashboard() {
         payload.remark = remark;
       }
 
-      await axios.post("http://localhost:8000/update-status/", payload);
+      await axios.post(
+        `${import.meta.env.VITE_API_URL}/update-status/`,
+        payload
+      );
       message.success(`Status updated to ${statusValue}`);
       if (statusValue === "Accepted") {
-        const res = await axios.get("http://localhost:8000/available-rooms/");
+        const res = await axios.get(
+          "${import.meta.env.VITE_API_URL}/available-rooms/"
+        );
         setRooms(res.data.rooms);
       }
       setModalVisible(false);

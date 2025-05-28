@@ -9,7 +9,7 @@ function AcceptedApplication() {
   const fetchApplications = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:8000/fetch-accepted-applications/"
+        `${import.meta.env.VITE_API_URL}/fetch-accepted-applications/`
       );
 
       if (response.data && response.data.applications) {
