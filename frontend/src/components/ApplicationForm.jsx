@@ -262,8 +262,9 @@ function ApplicationForm() {
                     </Title>
                     <Form.Item label="Degree" name="degree">
                       <Select
-                        defaultValue="Select Degree"
-                        style={{ width: "contentFit" }}
+                        placeholder="Select Degree"
+                        style={{ width: "100%" }}
+                        allowClear
                         // onChange={handleChange}
                         options={[
                           { value: "bachelour", label: "Bachelour" },
@@ -339,7 +340,8 @@ function ApplicationForm() {
                     >
                       <Select
                         defaultValue="Select Room Type"
-                        style={{ width: "auto" }}
+                        style={{ width: "100%" }}
+                        allowClear
                         // onChange={onChange}
                         options={[
                           { value: "single", label: "Single" },
@@ -358,20 +360,51 @@ function ApplicationForm() {
                         },
                       ]}
                     >
-                      <DatePicker style={{ width: "100%" }} />
+                      <DatePicker
+                        style={{ width: "100%" }}
+                        disabledDate={(current) =>
+                          current && current < new Date().setHours(0, 0, 0, 0)
+                        }
+                      />
                     </Form.Item>
 
                     <Form.Item
                       label="End  Duration"
                       name="end_date"
+                      dependencies={["start_date"]}
                       rules={[
                         {
                           required: true,
                           message: "Please Select Your End Date",
                         },
+                        ({ getFieldValue }) => ({
+                          validator(_, value) {
+                            const start = getFieldValue("start_date");
+                            if (!value || !start) return Promise.resolve();
+                            if (value.isSameOrBefore(start, "day")) {
+                              return Promise.reject(
+                                new Error(
+                                  "End date should be greater than start date"
+                                )
+                              );
+                            }
+                            return Promise.resolve();
+                          },
+                        }),
                       ]}
                     >
-                      <DatePicker style={{ width: "100%" }} />
+                      <DatePicker
+                        style={{ width: "100%" }}
+                        disabledDate={(current) => {
+                          const start = form3.getFieldValue("start_date");
+                          if (!start)
+                            return (
+                              current &&
+                              current < new Date().setHours(0, 0, 0, 0)
+                            );
+                          return current && current <= start.startOf("day");
+                        }}
+                      />
                     </Form.Item>
                     <Space
                       style={{ width: "100%", justifyContent: "space-between" }}
