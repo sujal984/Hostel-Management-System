@@ -8,8 +8,8 @@ from datetime import datetime
 import os
 from fastapi import Query
 
-# DATABASE_URL = "postgresql://postgres:postgres@localhost:5432/hostel_management_system"
-DATABASE_URL = os.getenv("DATABASE_URL")
+DATABASE_URL = "postgresql://postgres:postgres@localhost:5432/hostel_management_system"
+# DATABASE_URL = os.getenv("DATABASE_URL")
 engine = create_engine(DATABASE_URL)
 metadata = MetaData()
 

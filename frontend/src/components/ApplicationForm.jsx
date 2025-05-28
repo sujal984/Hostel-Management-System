@@ -234,11 +234,11 @@ function ApplicationForm() {
                         Continue
                       </Button>
                     </Form.Item>
-                    <FormItem>
+                    {/* <FormItem>
                       <div style={{ textAlign: "center", marginTop: ".3rem" }}>
                         <Button onClick={onclick}>Admin ?</Button>
                       </div>
-                    </FormItem>
+                    </FormItem> */}
                     <p style={{ textDecoration: "none" }}>
                       <Link to="/User/Application/status">
                         Already Applied ? Track Your Application
@@ -263,7 +263,8 @@ function ApplicationForm() {
                     <Form.Item label="Degree" name="degree">
                       <Select
                         placeholder="Select Degree"
-                        style={{ width: "100%" }}
+                        style={{ width: "auto" }}
+                        popupMatchSelectWidth={false}
                         allowClear
                         // onChange={handleChange}
                         options={[
@@ -340,7 +341,8 @@ function ApplicationForm() {
                     >
                       <Select
                         defaultValue="Select Room Type"
-                        style={{ width: "100%" }}
+                        style={{ width: "auto" }}
+                        popupMatchSelectWidth={false}
                         allowClear
                         // onChange={onChange}
                         options={[
@@ -381,7 +383,7 @@ function ApplicationForm() {
                           validator(_, value) {
                             const start = getFieldValue("start_date");
                             if (!value || !start) return Promise.resolve();
-                            if (value.isSameOrBefore(start, "day")) {
+                            if (!value.isAfter(start, "day")) {
                               return Promise.reject(
                                 new Error(
                                   "End date should be greater than start date"
