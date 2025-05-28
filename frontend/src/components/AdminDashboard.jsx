@@ -46,6 +46,7 @@ function AdminDashboard() {
   const handleSubmit = async (showFetchMsg = true) => {
     setLoading(true);
     try {
+      console.log(import.meta.env.VITE_API_URL);
       const response = await axios.get(
         `${import.meta.env.VITE_API_URL}/fetch-applications/`
       );

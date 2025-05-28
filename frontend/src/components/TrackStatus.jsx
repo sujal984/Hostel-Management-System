@@ -23,7 +23,7 @@ function TrackStatus() {
     setLoading(true);
     try {
       // Determine if the input is an email or a number
-
+      console.log(import.meta.env.VITE_API_URL);
       const response = await axios.get("${process.env.APP_URL}/get-status/", {
         params: isEmail ? { email: value } : { number: value },
       });

@@ -59,6 +59,7 @@ function ApplicationForm() {
       const values1 = await form1.validateFields();
       const values2 = await form2.validateFields();
       const values3 = await form3.validateFields();
+      console.log(import.meta.env.VITE_API_URL);
       // Remove id, room_number, and status if present
       const { id, room_number, status, ...filteredFormData } = formData;
       const {

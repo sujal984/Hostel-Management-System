@@ -21,6 +21,7 @@ function AdminLogin() {
   }, [navigate]);
   const handleLogin = async (values) => {
     try {
+      console.log(import.meta.env.VITE_API_URL);
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/login/`,
         {
