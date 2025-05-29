@@ -2,8 +2,9 @@ import { Button, Table, Typography } from "antd";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet";
 const { Title } = Typography;
-function AcceptedApplication() {
+function AcceptedApplication({ title }) {
   const [applications, setApplications] = useState([]);
   const navigate = useNavigate();
   const fetchApplications = async () => {
@@ -42,6 +43,9 @@ function AcceptedApplication() {
 
   return (
     <>
+      <Helmet>
+        <title>{title}</title>
+      </Helmet>
       <Title level={3} className="form-title">
         Accepted Applications
       </Title>

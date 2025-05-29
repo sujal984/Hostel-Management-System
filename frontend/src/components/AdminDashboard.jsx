@@ -11,12 +11,13 @@ import {
 } from "antd";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { Helmet } from "react-helmet";
 
 // import { Pagination } from "antd";
 import { useNavigate } from "react-router-dom";
 const { Title } = Typography;
 
-function AdminDashboard() {
+function AdminDashboard({ title }) {
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
@@ -70,7 +71,7 @@ function AdminDashboard() {
   };
   useEffect(() => {
     handleSubmit();
-  }, [rooms, remark]);
+  }, []);
   const columns = [
     { title: "Name", dataIndex: "name", key: "name" },
     { title: "Email", dataIndex: "email", key: "email" },
@@ -133,6 +134,12 @@ function AdminDashboard() {
         payload
       );
       message.success(`Status updated to ${statusValue}`);
+      handleSubmit(false);
+      setModalVisible(false);
+      setRemark("");
+      setSelectedRoomId(null);
+      setSelectedApp(null);
+
       if (statusValue === "Accepted") {
         const res = await axios.get(
           "${import.meta.env.VITE_API_URL}/available-rooms/"
@@ -154,137 +161,143 @@ function AdminDashboard() {
     setTimeout(() => {
       navigate("/Admin/login", { replace: true });
     }, 100);
+    useEffect(() => {
+      navigate("/Admin/login", { replace: true });
+    });
   };
 
   return (
-    <div style={{ padding: 24 }}>
-      <div
-        style={{
-          position: "absolute",
-          top: 24,
-          right: 24,
-          zIndex: 1,
-          gap: 16,
-          display: "flex",
-        }}
-      >
-        <Button color="green" onClick={handleAcceptedApplications}>
-          Accepted Applications
-        </Button>
-        <Button type="primary" danger onClick={handleLogout}>
-          Logout
-        </Button>
-      </div>
-      <Title level={3} className="form-title">
-        All Applications
-      </Title>
+    <>
+      <Helmet>
+        <title>{title}</title>
+      </Helmet>
+      <div style={{ padding: 24 }}>
+        <div className="admin-dashboard-header-buttons">
+          <Button color="green" onClick={handleAcceptedApplications}>
+            Accepted Applications
+          </Button>
+          <Button type="primary" danger onClick={handleLogout}>
+            Logout
+          </Button>
+        </div>
+        <Title level={3} className="form-title">
+          All Applications
+        </Title>
 
-      <div className="responsive-table">
-        <Table
-          columns={columns}
-          dataSource={applications}
-          rowKey={(record) => record.id || record.email + record.name}
-          bordered
-          pagination={{ pageSize: 8 }}
-          scroll={{ x: true }}
-        />
-      </div>
+        <div className="responsive-table">
+          <Table
+            columns={columns}
+            dataSource={applications}
+            rowKey={(record) => record.id || record.email + record.name}
+            bordered
+            pagination={{ pageSize: 8 }}
+            scroll={{ x: true }}
+          />
+        </div>
 
-      <Modal
-        open={modalVisible}
-        title="Application Details"
-        onCancel={() => setModalVisible(false)}
-        footer={null}
-        width={800}
-      >
-        {selectedApp && (
-          <Descriptions bordered column={1} size="small">
-            <Descriptions.Item label="Name">
-              {selectedApp.name}
-            </Descriptions.Item>
-            <Descriptions.Item label="Email">
-              {selectedApp.email}
-            </Descriptions.Item>
-            <Descriptions.Item label="Mobile">
-              {selectedApp.number}
-            </Descriptions.Item>
-            <Descriptions.Item label="DOB">{selectedApp.dob}</Descriptions.Item>
-            <Descriptions.Item label="Degree">
-              {selectedApp.degree}
-            </Descriptions.Item>
-            <Descriptions.Item label="University">
-              {selectedApp.uni_name}
-            </Descriptions.Item>
-            <Descriptions.Item label="College">
-              {selectedApp.clg_name}
-            </Descriptions.Item>
-            <Descriptions.Item label="Room Type">
-              {selectedApp.room_type}
-            </Descriptions.Item>
-            <Descriptions.Item label="Start Duration">
-              {selectedApp.start_date}
-            </Descriptions.Item>
-            <Descriptions.Item label="End Duration">
-              {selectedApp.end_date}
-            </Descriptions.Item>
-            <Descriptions.Item label="Decision">
-              {selectedApp && (
-                <>
-                  <div style={{ marginBottom: 16 }}>
-                    <Select
-                      style={{ width: "100%" }}
-                      placeholder="Select Room (on accept)"
-                      onChange={setSelectedRoomId}
-                      value={selectedRoomId}
-                      defaultValue="Select Room "
-                      allowClear
-                    >
-                      {rooms.map((room) => (
-                        <Select.Option key={room.room_id} value={room.room_id}>
-                          {room.room_number} - {room.room_type}
-                        </Select.Option>
-                      ))}
-                    </Select>
-                  </div>
-                  <Input.TextArea
-                    rows={3}
-                    placeholder="Remarks"
-                    value={remark}
-                    onChange={(e) => setRemark(e.target.value)}
-                    // Enable input always
-                    disabled={false}
-                  />
-                  <div style={{ display: "flex", gap: 16, marginTop: 16 }}>
-                    <Button
-                      type="primary"
-                      onClick={() => updateStatus("Accepted")}
-                      disabled={!selectedRoomId}
-                    >
-                      Accept
-                    </Button>
-                    <Button
-                      type="primary"
-                      danger
-                      onClick={() => {
-                        if (!remark.trim()) {
-                          message.error("Please enter a remark for rejection.");
-                          return;
-                        }
-                        updateStatus("Rejected");
-                        handleSubmit(false);
-                      }}
-                      disabled={!!selectedRoomId}
-                    >
-                      Reject
-                    </Button>
-                  </div>
-                </>
-              )}
-            </Descriptions.Item>
-          </Descriptions>
-        )}
-      </Modal>
-    </div>
+        <Modal
+          open={modalVisible}
+          title="Application Details"
+          onCancel={() => setModalVisible(false)}
+          footer={null}
+          width={800}
+        >
+          {selectedApp && (
+            <Descriptions bordered column={1} size="small">
+              <Descriptions.Item label="Name">
+                {selectedApp.name}
+              </Descriptions.Item>
+              <Descriptions.Item label="Email">
+                {selectedApp.email}
+              </Descriptions.Item>
+              <Descriptions.Item label="Mobile">
+                {selectedApp.number}
+              </Descriptions.Item>
+              <Descriptions.Item label="DOB">
+                {selectedApp.dob}
+              </Descriptions.Item>
+              <Descriptions.Item label="Degree">
+                {selectedApp.degree}
+              </Descriptions.Item>
+              <Descriptions.Item label="University">
+                {selectedApp.uni_name}
+              </Descriptions.Item>
+              <Descriptions.Item label="College">
+                {selectedApp.clg_name}
+              </Descriptions.Item>
+              <Descriptions.Item label="Room Type">
+                {selectedApp.room_type}
+              </Descriptions.Item>
+              <Descriptions.Item label="Start Duration">
+                {selectedApp.start_date}
+              </Descriptions.Item>
+              <Descriptions.Item label="End Duration">
+                {selectedApp.end_date}
+              </Descriptions.Item>
+              <Descriptions.Item label="Decision">
+                {selectedApp && (
+                  <>
+                    <div style={{ marginBottom: 16 }}>
+                      <Select
+                        style={{ width: "100%" }}
+                        placeholder="Select Room (on accept)"
+                        onChange={setSelectedRoomId}
+                        value={selectedRoomId}
+                        defaultValue="Select Room "
+                        allowClear
+                      >
+                        {(rooms || []).map((room) => (
+                          <Select.Option
+                            key={room.room_id}
+                            value={room.room_id}
+                          >
+                            {room.room_number} - {room.room_type}
+                          </Select.Option>
+                        ))}
+                      </Select>
+                    </div>
+                    <Input.TextArea
+                      rows={3}
+                      placeholder="Remarks"
+                      value={remark}
+                      onChange={(e) => setRemark(e.target.value)}
+                      // Enable input always
+                      disabled={false}
+                    />
+                    <div style={{ display: "flex", gap: 16, marginTop: 16 }}>
+                      <Button
+                        type="primary"
+                        onClick={() => updateStatus("Accepted")}
+                        disabled={!selectedRoomId}
+                      >
+                        Accept
+                      </Button>
+                      <Button
+                        type="primary"
+                        danger
+                        onClick={() => {
+                          if (!remark.trim()) {
+                            message.error(
+                              "Please enter a remark for rejection."
+                            );
+                            return;
+                          }
+                          updateStatus("Rejected");
+                          handleSubmit(false);
+                        }}
+                        disabled={!!selectedRoomId}
+                      >
+                        Reject
+                      </Button>
+                    </div>
+                  </>
+                )}
+              </Descriptions.Item>
+            </Descriptions>
+          )}
+        </Modal>
+      </div>
+    </>
   );
 }
 

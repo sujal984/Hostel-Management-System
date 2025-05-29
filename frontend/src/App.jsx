@@ -12,6 +12,7 @@ function App() {
     <Routes>
       {Object.values(ROUTES).map((route) => {
         const Component = route.component;
+        // console.log(route.title);
 
         if (route.path === "/Admin/login") {
           // If logged in and on /Admin/login, redirect manually to dashboard
@@ -28,7 +29,7 @@ function App() {
               <Route
                 key={route.path}
                 path={route.path}
-                element={<Component />}
+                element={<Component title={route.title} />}
               />
             );
           }
@@ -38,13 +39,14 @@ function App() {
           route.path === "/Admin/dashboard" ||
           (route.path.startsWith("/Admin/") && route.path !== "/Admin/login")
         ) {
+          console.log(route.title);
           return (
             <Route
               key={route.path}
               path={route.path}
               element={
                 <ProtectedRoute>
-                  <Component />
+                  <Component title={route.title} />
                 </ProtectedRoute>
               }
             />
@@ -52,7 +54,11 @@ function App() {
         }
 
         return (
-          <Route key={route.path} path={route.path} element={<Component />} />
+          <Route
+            key={route.path}
+            path={route.path}
+            element={<Component title={route.title} />}
+          />
         );
       })}
 
