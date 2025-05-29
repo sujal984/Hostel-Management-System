@@ -21,6 +21,7 @@ import { Helmet } from "react-helmet";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { Endpoint } from "../constant/Endpoint";
 
 const { Title } = Typography;
 
@@ -32,6 +33,7 @@ function ApplicationForm({ title }) {
   const [form1] = Form.useForm();
   const [form2] = Form.useForm();
   const [form3] = Form.useForm();
+  const [errMessage, setErrMessage] = useState(null);
   const [showResult, setShowResult] = useState(null);
   const navigate = useNavigate();
 
@@ -61,7 +63,7 @@ function ApplicationForm({ title }) {
       const values1 = await form1.validateFields();
       const values2 = await form2.validateFields();
       const values3 = await form3.validateFields();
-      console.log(import.meta.env.VITE_API_URL);
+
       // Remove id, room_number, and status if present
       const { id, room_number, status, ...filteredFormData } = formData;
       const {
@@ -72,7 +74,7 @@ function ApplicationForm({ title }) {
       } = { ...values1, ...values2, ...values3 };
       const payload = { ...filteredFormData, ...filteredValues };
       await axios.post(
-        `${import.meta.env.VITE_API_URL}/submit-application/`,
+        `${import.meta.env.VITE_API_URL}${Endpoint.submitapplication}`,
         payload
       );
       message.success("Application Submitted successfully");
@@ -86,12 +88,17 @@ function ApplicationForm({ title }) {
         error.response.data.detail.includes("Application already exists")
       ) {
         message.error("Application already exists with this email or number");
+        setErrMessage("Application already exists with this email or number");
       } else if (error.response) {
         message.error(error.response.data.message || "Submission failed.");
+        setErrMessage("Submission failed.");
       } else if (error.request) {
         message.error("No response received from server.");
+        setErrMessage("No response received from server.");
       } else {
         message.error("Error submitting form.");
+        console.log(error);
+        setErrMessage("Error submitting form.");
       }
     }
   };
@@ -145,11 +152,12 @@ function ApplicationForm({ title }) {
                 />
               )}
               {showResult === "error" && (
-                <div style={{ height: "100vh" }}>
+                <div style={{ height: "100%" }}>
                   <Result
                     status="error"
                     title="Application Submitted Failed!"
-                    style={{ height: "100vh" }}
+                    subTitle={errMessage}
+                    style={{ height: "100%" }}
                     extra={[
                       <>
                         <Button
@@ -160,6 +168,15 @@ function ApplicationForm({ title }) {
                           }}
                         >
                           Try Again!
+                        </Button>
+                        <Button
+                          type="primary"
+                          variant="solid"
+                          onClick={() => {
+                            navigate("/user/application/status");
+                          }}
+                        >
+                          Track your Application
                         </Button>
                       </>,
                     ]}
@@ -349,7 +366,7 @@ function ApplicationForm({ title }) {
                         ]}
                       >
                         <Select
-                          defaultValue="Select Room Type"
+                          placeholder="Select Room Type"
                           style={{ width: "auto" }}
                           popupMatchSelectWidth={false}
                           allowClear

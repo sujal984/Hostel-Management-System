@@ -24,7 +24,7 @@ function AdminLogin({ title }) {
       console.log(import.meta.env.VITE_API_URL);
 
       const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/login/`,
+        `${import.meta.env.VITE_API_URL}${Endpoint.adminlogin}`,
         {
           User_Name: values.User_Name,
           Password: values.Password,

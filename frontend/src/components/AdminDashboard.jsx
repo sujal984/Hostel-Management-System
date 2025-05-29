@@ -8,13 +8,17 @@ import {
   Descriptions,
   Select,
   Input,
+  Space,
+  Popconfirm,
+  Pagination,
 } from "antd";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 
 // import { Pagination } from "antd";
-import { useNavigate } from "react-router-dom";
+import { data, useNavigate } from "react-router-dom";
+import { Endpoint } from "../constant/Endpoint";
 const { Title } = Typography;
 
 function AdminDashboard({ title }) {
@@ -34,7 +38,7 @@ function AdminDashboard({ title }) {
     setRemark("");
     try {
       const res = await axios.get(
-        `${import.meta.env.VITE_API_URL}/available-rooms/`
+        `${import.meta.env.VITE_API_URL}${Endpoint.availablerooms}`
       );
       setRooms(res.data.rooms);
     } catch (err) {
@@ -47,9 +51,8 @@ function AdminDashboard({ title }) {
   const handleSubmit = async (showFetchMsg = true) => {
     setLoading(true);
     try {
-      console.log(import.meta.env.VITE_API_URL);
       const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/fetch-applications/`
+        `${import.meta.env.VITE_API_URL}${Endpoint.fetchapplications}`
       );
       if (response.data && response.data.applications) {
         setApplications(response.data.applications);
@@ -67,6 +70,18 @@ function AdminDashboard({ title }) {
       }
     } finally {
       setLoading(false);
+    }
+  };
+  const deleteApplication = async (email, number) => {
+    try {
+      await axios.delete(
+        `${import.meta.env.VITE_API_URL}${Endpoint.deleteapplication}`,
+        { params: { email, number } }
+      );
+      message.success("Application deleted successfully");
+      handleSubmit(false);
+    } catch (error) {
+      message.error("Error deleting application");
     }
   };
   useEffect(() => {
@@ -89,20 +104,49 @@ function AdminDashboard({ title }) {
       render: (_, record) => {
         if (record.status === "Accepted" || record.status === "Rejected") {
           return (
-            <span
-              style={{
-                color: record.status === "Accepted" ? "green" : "red",
-                fontWeight: 600,
-              }}
-            >
-              {record.status}
-            </span>
+            <>
+              <Space size="middle">
+                <span
+                  style={{
+                    color: record.status === "Accepted" ? "green" : "red",
+                    fontWeight: 600,
+                  }}
+                >
+                  {record.status}
+                </span>
+
+                <Popconfirm
+                  title="Delete the Application"
+                  description="Are you sure to delete this application?"
+                  okText="Yes"
+                  cancelText="No"
+                  onConfirm={() =>
+                    deleteApplication(record.email, record.number)
+                  }
+                >
+                  <Button danger disabled={record.status === "Accepted"}>
+                    Delete
+                  </Button>
+                </Popconfirm>
+              </Space>
+            </>
           );
         }
         return (
-          <Button type="link" onClick={() => showDetail(record)}>
-            View
-          </Button>
+          <Space size="middle">
+            <Button type="link" onClick={() => showDetail(record)}>
+              View
+            </Button>
+            <Popconfirm
+              title="Delete the task"
+              description="Are you sure to delete this task?"
+              okText="Yes"
+              cancelText="No"
+              onConfirm={() => deleteApplication(record.email, record.number)}
+            >
+              <Button danger>Delete</Button>
+            </Popconfirm>
+          </Space>
         );
       },
     },
@@ -130,7 +174,7 @@ function AdminDashboard({ title }) {
       }
 
       await axios.post(
-        `${import.meta.env.VITE_API_URL}/update-status/`,
+        `${import.meta.env.VITE_API_URL}${Endpoint.applicationupdatestatus}`,
         payload
       );
       message.success(`Status updated to ${statusValue}`);
@@ -142,7 +186,7 @@ function AdminDashboard({ title }) {
 
       if (statusValue === "Accepted") {
         const res = await axios.get(
-          "${import.meta.env.VITE_API_URL}/available-rooms/"
+          `${import.meta.env.VITE_API_URL}${Endpoint.availablerooms}`
         );
         setRooms(res.data.rooms);
       }
@@ -187,10 +231,16 @@ function AdminDashboard({ title }) {
         <div className="responsive-table">
           <Table
             columns={columns}
-            dataSource={applications}
+            dataSource={applications.filter(
+              (app) => app && app.name && app.email && app.number
+            )}
             rowKey={(record) => record.id || record.email + record.name}
             bordered
-            pagination={{ pageSize: 8 }}
+            pagination={{
+              pageSize: 10,
+              defaultCurrent: 1,
+              total: applications.length,
+            }}
             scroll={{ x: true }}
           />
         </div>

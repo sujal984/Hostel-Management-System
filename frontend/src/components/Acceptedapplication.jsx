@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
+import { Endpoint } from "../constant/Endpoint";
 const { Title } = Typography;
 function AcceptedApplication({ title }) {
   const [applications, setApplications] = useState([]);
@@ -10,7 +11,7 @@ function AcceptedApplication({ title }) {
   const fetchApplications = async () => {
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/fetch-accepted-applications/`
+        `${import.meta.env.VITE_API_URL}${Endpoint.acceptedapplications}`
       );
 
       if (response.data && response.data.applications) {

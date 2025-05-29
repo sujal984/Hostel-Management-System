@@ -221,7 +221,36 @@ def fetch_applications():
     finally:
         db.close()
 
+@app.delete("/delete-application/")
+def delete_application(email: str = Query(None), number: str = Query(None)):
+    db = SessionLocal()
+    try:
+        if not email and not number:
+            raise HTTPException(status_code=400, detail="Email or number required")
 
+        # Select the application first
+        query = applications.select()
+        if email and number:
+            query = query.where((applications.c.email == email) | (applications.c.number == number))
+        elif email:
+            query = query.where(applications.c.email == email)
+        elif number:
+            query = query.where(applications.c.number == number)
+
+        result = db.execute(query).fetchone()
+        if not result:
+            raise HTTPException(status_code=404, detail="Application not found")
+
+        # Delete the application
+        delete_query = applications.delete().where(applications.c.id == result.id)
+        db.execute(delete_query)
+        db.commit()
+        return {"detail": "Application deleted successfully"}
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=str(e))
+    finally:
+        db.close()
 
 @app.get("/get-status/")
 def get_status(email: str = Query(None), number: str = Query(None)):

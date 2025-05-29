@@ -39,7 +39,6 @@ function App() {
           route.path === "/Admin/dashboard" ||
           (route.path.startsWith("/Admin/") && route.path !== "/Admin/login")
         ) {
-          console.log(route.title);
           return (
             <Route
               key={route.path}

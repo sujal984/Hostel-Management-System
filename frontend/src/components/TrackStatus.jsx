@@ -5,9 +5,9 @@ import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
 const { Search } = Input;
 const { Title, Text } = Typography;
+import { Endpoint } from "../constant/Endpoint";
 
 function TrackStatus({ title }) {
-  console.log(title);
   const [statusColor, setStatusColor] = useState("success");
   const [result, setResult] = useState(null);
   const navigate = useNavigate();
@@ -77,7 +77,7 @@ function TrackStatus({ title }) {
     setLoading(true);
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/get-status/`,
+        `${import.meta.env.VITE_API_URL}${Endpoint.trackStatus}`,
         {
           params: isEmail ? { email: value } : { number: value },
         }
