@@ -2,49 +2,31 @@ import {
   Button,
   message,
   Table,
-  Card,
   Typography,
-  Modal,
-  Descriptions,
-  Select,
-  Input,
   Space,
   Popconfirm,
   Pagination,
+  Descriptions,
+  Tooltip,
 } from "antd";
+
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
-
-// import { Pagination } from "antd";
-import { data, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Endpoint } from "../constant/Endpoint";
+
+import CaretRightOutlined from "@ant-design/icons/CaretRightOutlined";
+import CaretDownOutlined from "@ant-design/icons/CaretDownOutlined";
+
 const { Title } = Typography;
 
 function AdminDashboard({ title }) {
   const [applications, setApplications] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [selectedApp, setSelectedApp] = useState(null);
-  const [selectedRoomId, setSelectedRoomId] = useState(null);
-  const [remark, setRemark] = useState("");
-  const [rooms, setRooms] = useState([]);
+  const [loading, setLoading] = useState([]);
   const navigate = useNavigate();
+  const [current, setCurrent] = useState(1);
 
-  const showDetail = async (record) => {
-    setSelectedApp(record);
-    setModalVisible(true);
-    setSelectedRoomId(null);
-    setRemark("");
-    try {
-      const res = await axios.get(
-        `${import.meta.env.VITE_API_URL}${Endpoint.availablerooms}`
-      );
-      setRooms(res.data.rooms);
-    } catch (err) {
-      message.error("Failed to fetch rooms");
-    }
-  };
   const handleAcceptedApplications = () => {
     navigate("/Admin/accepted-applications");
   };
@@ -55,7 +37,12 @@ function AdminDashboard({ title }) {
         `${import.meta.env.VITE_API_URL}${Endpoint.fetchapplications}`
       );
       if (response.data && response.data.applications) {
-        setApplications(response.data.applications);
+        const fixedApplications = response.data.applications.map((app) => ({
+          ...app,
+          status: app.status ? app.status : "Pending",
+        }));
+        setApplications(fixedApplications);
+
         if (showFetchMsg) {
           message.success("Applications successfully fetched.");
         }
@@ -82,6 +69,21 @@ function AdminDashboard({ title }) {
       handleSubmit(false);
     } catch (error) {
       message.error("Error deleting application");
+    }
+  };
+  const showDetail = async (record) => {
+    try {
+      const res = await axios.get(
+        `${import.meta.env.VITE_API_URL}${Endpoint.applicationdetail}/${
+          record.id
+        }`
+      );
+
+      navigate(`/Admin/Application/detail/${record.id}`);
+    } catch (error) {
+      message.error(
+        error?.response?.data?.detail || "Failed to fetch application details"
+      );
     }
   };
   useEffect(() => {
@@ -128,15 +130,17 @@ function AdminDashboard({ title }) {
                     Delete
                   </Button>
                 </Popconfirm>
+                <span>
+                  <a href="#" onClick={() => showDetail(record)}>
+                    View
+                  </a>
+                </span>
               </Space>
             </>
           );
         }
         return (
-          <Space size="middle">
-            <Button type="link" onClick={() => showDetail(record)}>
-              View
-            </Button>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
             <Popconfirm
               title="Delete the task"
               description="Are you sure to delete this task?"
@@ -146,58 +150,55 @@ function AdminDashboard({ title }) {
             >
               <Button danger>Delete</Button>
             </Popconfirm>
-          </Space>
+            <Button type="link" onClick={() => showDetail(record)}>
+              View
+            </Button>
+          </div>
         );
       },
     },
   ];
 
-  const updateStatus = async (statusValue) => {
-    if (!selectedApp) return;
-
-    try {
-      const payload = {
-        email: selectedApp.email,
-        number: selectedApp.number,
-        status: statusValue,
-      };
-
-      if (statusValue === "Accepted") {
-        const selectedRoom = rooms.find((r) => r.room_id === selectedRoomId);
-        if (selectedRoom) {
-          payload.room_number = selectedRoom.room_number;
-        }
-      }
-
-      if (statusValue === "Rejected") {
-        payload.remark = remark;
-      }
-
-      await axios.post(
-        `${import.meta.env.VITE_API_URL}${Endpoint.applicationupdatestatus}`,
-        payload
-      );
-      message.success(`Status updated to ${statusValue}`);
-      handleSubmit(false);
-      setModalVisible(false);
-      setRemark("");
-      setSelectedRoomId(null);
-      setSelectedApp(null);
-
-      if (statusValue === "Accepted") {
-        const res = await axios.get(
-          `${import.meta.env.VITE_API_URL}${Endpoint.availablerooms}`
-        );
-        setRooms(res.data.rooms);
-      }
-      setModalVisible(false);
-      setRemark("");
-      setSelectedRoomId(null);
-      // Refresh applications without showing fetch message
-    } catch (error) {
-      console.log(error);
-      message.error("Failed to update status");
-    }
+  const expandedRowRender = (record) => {
+    const expandableData = [
+      { label: "Email", value: record.email },
+      { label: "Mobile", value: record.number },
+      { label: "Status", value: record.status },
+      { label: "Remark", value: record.remark },
+    ];
+    return (
+      <Descriptions bordered column={1} size="small" style={{ width: "30%" }}>
+        {expandableData.map((item, index) => (
+          <Descriptions.Item label={item.label} key={index}>
+            {item.value || "-"}
+          </Descriptions.Item>
+        ))}
+      </Descriptions>
+    );
+  };
+  const expandableConfig = {
+    expandedRowRender,
+    expandIcon: ({ expanded, onExpand, record }) =>
+      expanded ? (
+        <CaretDownOutlined onClick={(e) => onExpand(record, e)} />
+      ) : (
+        <>
+          <Tooltip
+            title={record.status}
+            style={{
+              title:
+                record.status === "Accepted"
+                  ? { color: "green" }
+                  : { color: "red" },
+            }}
+          >
+            <CaretRightOutlined onClick={(e) => onExpand(record, e)} />
+          </Tooltip>
+        </>
+      ),
+    rowExpandable: (record) => record.name && record.email,
+    defaultExpandAllRows: false,
+    expandRowByClick: true,
   };
 
   const handleLogout = () => {
@@ -209,13 +210,19 @@ function AdminDashboard({ title }) {
       navigate("/Admin/login", { replace: true });
     });
   };
-
+  const pageSize = 8;
+  const paginatedData = applications
+    .filter((app) => app && app.name && app.email && app.number)
+    .slice((current - 1) * pageSize, current * pageSize);
+  const handlePageChange = (page) => {
+    setCurrent(page);
+  };
   return (
     <>
       <Helmet>
         <title>{title}</title>
       </Helmet>
-      <div style={{ padding: 24 }}>
+      <div style={{ padding: 20 }}>
         <div className="admin-dashboard-header-buttons">
           <Button color="green" onClick={handleAcceptedApplications}>
             Accepted Applications
@@ -228,124 +235,35 @@ function AdminDashboard({ title }) {
           All Applications
         </Title>
 
-        <div className="responsive-table">
+        <div>
           <Table
+            className="responsive-table"
+            expandable={expandableConfig}
             columns={columns}
-            dataSource={applications.filter(
-              (app) => app && app.name && app.email && app.number
-            )}
+            dataSource={paginatedData}
             rowKey={(record) => record.id || record.email + record.name}
             bordered
-            pagination={{
-              pageSize: 10,
-              defaultCurrent: 1,
-              total: applications.length,
-            }}
-            scroll={{ x: true }}
+            pagination={false}
           />
         </div>
-
-        <Modal
-          open={modalVisible}
-          title="Application Details"
-          onCancel={() => setModalVisible(false)}
-          footer={null}
-          width={800}
-        >
-          {selectedApp && (
-            <Descriptions bordered column={1} size="small">
-              <Descriptions.Item label="Name">
-                {selectedApp.name}
-              </Descriptions.Item>
-              <Descriptions.Item label="Email">
-                {selectedApp.email}
-              </Descriptions.Item>
-              <Descriptions.Item label="Mobile">
-                {selectedApp.number}
-              </Descriptions.Item>
-              <Descriptions.Item label="DOB">
-                {selectedApp.dob}
-              </Descriptions.Item>
-              <Descriptions.Item label="Degree">
-                {selectedApp.degree}
-              </Descriptions.Item>
-              <Descriptions.Item label="University">
-                {selectedApp.uni_name}
-              </Descriptions.Item>
-              <Descriptions.Item label="College">
-                {selectedApp.clg_name}
-              </Descriptions.Item>
-              <Descriptions.Item label="Room Type">
-                {selectedApp.room_type}
-              </Descriptions.Item>
-              <Descriptions.Item label="Start Duration">
-                {selectedApp.start_date}
-              </Descriptions.Item>
-              <Descriptions.Item label="End Duration">
-                {selectedApp.end_date}
-              </Descriptions.Item>
-              <Descriptions.Item label="Decision">
-                {selectedApp && (
-                  <>
-                    <div style={{ marginBottom: 16 }}>
-                      <Select
-                        style={{ width: "100%" }}
-                        placeholder="Select Room (on accept)"
-                        onChange={setSelectedRoomId}
-                        value={selectedRoomId}
-                        defaultValue="Select Room "
-                        allowClear
-                      >
-                        {(rooms || []).map((room) => (
-                          <Select.Option
-                            key={room.room_id}
-                            value={room.room_id}
-                          >
-                            {room.room_number} - {room.room_type}
-                          </Select.Option>
-                        ))}
-                      </Select>
-                    </div>
-                    <Input.TextArea
-                      rows={3}
-                      placeholder="Remarks"
-                      value={remark}
-                      onChange={(e) => setRemark(e.target.value)}
-                      // Enable input always
-                      disabled={false}
-                    />
-                    <div style={{ display: "flex", gap: 16, marginTop: 16 }}>
-                      <Button
-                        type="primary"
-                        onClick={() => updateStatus("Accepted")}
-                        disabled={!selectedRoomId}
-                      >
-                        Accept
-                      </Button>
-                      <Button
-                        type="primary"
-                        danger
-                        onClick={() => {
-                          if (!remark.trim()) {
-                            message.error(
-                              "Please enter a remark for rejection."
-                            );
-                            return;
-                          }
-                          updateStatus("Rejected");
-                          handleSubmit(false);
-                        }}
-                        disabled={!!selectedRoomId}
-                      >
-                        Reject
-                      </Button>
-                    </div>
-                  </>
-                )}
-              </Descriptions.Item>
-            </Descriptions>
-          )}
-        </Modal>
+        <Pagination
+          style={{
+            position: "static",
+            right: 0,
+            marginTop: 16,
+            marginRight: 0,
+            marginBottom: 5,
+            marginLeft: "82.5rem",
+          }}
+          defaultCurrent={1}
+          hideOnSinglePage={true}
+          pageSize={pageSize}
+          total={applications.length}
+          showTotal={(total, range) => `${range[0]}-${range[1]} of ${total}`}
+          size="small"
+          onChange={handlePageChange}
+          current={current}
+        />
       </div>
     </>
   );

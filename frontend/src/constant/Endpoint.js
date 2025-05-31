@@ -1,5 +1,3 @@
-import TrackStatus from "../components/TrackStatus";
-
 export const Endpoint = {
   submitapplication: "/submit-application/",
   fetchapplications: "/fetch-applications/",
@@ -10,4 +8,5 @@ export const Endpoint = {
   applicationupdatestatus: "/update-status/",
   availablerooms: "/available-rooms/",
   adminlogin: "/login/",
+  applicationdetail: "/application",
 };

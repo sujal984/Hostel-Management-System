@@ -8,10 +8,11 @@ const { Title, Text } = Typography;
 import { Endpoint } from "../constant/Endpoint";
 
 function TrackStatus({ title }) {
-  const [statusColor, setStatusColor] = useState("success");
+  const [statusColor, setStatusColor] = useState("warning");
   const [result, setResult] = useState(null);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState("pending");
 
   // const onSearch = async (value) => {
   //   const isEmail = value.includes("@");
@@ -82,23 +83,22 @@ function TrackStatus({ title }) {
           params: isEmail ? { email: value } : { number: value },
         }
       );
-      if (
-        response.data &&
-        response.data.application &&
-        response.data.application.status
-      ) {
-        const { status, room_number, remark } = response.data.application;
+      if (response.data && response.data.application) {
+        // If status is missing or null, treat as "Pending"
+        const status = response.data.application.status || "Pending";
+        const { room_number, remark } = response.data.application;
+        setStatus(status);
         let color = "default";
         let msg = `Status for application (${value}): ${status}`;
-        if (status && status.toLowerCase() === "accepted" && room_number) {
+        if (status.toLowerCase() === "accepted" && room_number) {
           msg += `  Your Room Number is : ${room_number}`;
           color = "success";
-        } else if (status && status.toLowerCase() === "rejected") {
+        } else if (status.toLowerCase() === "rejected") {
           color = "danger";
           if (remark) {
             msg += `  Reason Why it is Rejected: ${remark}`;
           }
-        } else if (status && status.toLowerCase() === "pending") {
+        } else if (status.toLowerCase() === "pending") {
           color = "warning";
         }
         setStatusColor(color);

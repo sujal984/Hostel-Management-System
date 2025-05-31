@@ -4,7 +4,7 @@ import Input from "antd/es/input/Input";
 import { useState, useEffect } from "react";
 import { Result } from "antd";
 import { Helmet } from "react-helmet";
-
+import { Endpoint } from "../constant/Endpoint";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -20,9 +20,8 @@ function AdminLogin({ title }) {
     }
   }, [navigate]);
   const handleLogin = async (values) => {
+    console.log('run')
     try {
-      console.log(import.meta.env.VITE_API_URL);
-
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}${Endpoint.adminlogin}`,
         {
@@ -36,10 +35,12 @@ function AdminLogin({ title }) {
         navigate("/Admin/dashboard");
       } else {
         setShowResult(true);
+
         localStorage.removeItem("admin_logged_in");
       }
     } catch (error) {
       setShowResult(true);
+      console.log(error);
       localStorage.removeItem("admin_logged_in");
     }
   };

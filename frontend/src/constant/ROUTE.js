@@ -3,6 +3,8 @@ import AdminDashboard from "../components/AdminDashboard";
 import AdminLogin from "../components/AdminLogin";
 import ApplicationForm from "../components/ApplicationForm";
 import TrackStatus from "../components/TrackStatus";
+import Temporary from "../components/Temporary";
+import ApplicationDetail from "../components/ApplicationDetail";
 
 export const ROUTES = {
   ApplicationForm: {
@@ -35,5 +37,17 @@ export const ROUTES = {
     component: AcceptedApplication,
     title: "Accepted Applications",
     heading: "Accepted Applications",
+  },
+  Application_Detail: {
+    path: `/Admin/Application/detail/:id`,
+    component: ApplicationDetail,
+    title: "Application Detail",
+    heading: "Application Detail",
+  },
+  Temporary: {
+    path: "/temporary",
+    component: Temporary,
+    title: "Temporary",
+    heading: "Temporary",
   },
 };

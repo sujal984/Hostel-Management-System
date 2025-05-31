@@ -1,5 +1,12 @@
 /* Global Styles */
 /* Ensure box-sizing is consistent across all elements */
+/* 
+
+
+.ant-table-measure-row {
+    display: none !important;
+} */
+
 html,
 body,
 #root {

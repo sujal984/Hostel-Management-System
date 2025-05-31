@@ -6,13 +6,19 @@ from sqlalchemy import create_engine, Column, Integer,ForeignKey,DateTime, Strin
 from sqlalchemy.orm import sessionmaker
 from datetime import datetime
 import os
+import io
 from fastapi import Query
+from fastapi.responses import StreamingResponse
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+from fastapi.middleware.cors import CORSMiddleware
 
-DATABASE_URL = "postgresql://postgres:postgres@localhost:5432/hostel_management_system"
+DATABASE_URL = "postgresql://postgres:postgres@localhost:5432/Hostel-Management-System"
 # DATABASE_URL = os.getenv("DATABASE_URL")
 engine = create_engine(DATABASE_URL)
 metadata = MetaData()
 
+# origins = ["http://localhost:5174"]
 applications = Table(
     "applications", metadata,
     Column("id", Integer, primary_key=True),
@@ -33,7 +39,7 @@ applications = Table(
 admin=Table(
     "admin",metadata,
     Column("User_Name",String),
-    Column("Password",Integer)
+    Column("Password",String)
 )
 rooms = Table(
     "rooms", metadata,
@@ -53,7 +59,7 @@ SessionLocal = sessionmaker(bind=engine)
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  
+    allow_origins=['*'],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -71,7 +77,7 @@ class ApplicationFormData(BaseModel):
     end_date: str
 class AdminData(BaseModel):
     User_Name:str
-    Password:int
+    Password:str
 class UpdateStatusData(BaseModel):
     email: str = None
     number: str = None
@@ -91,11 +97,11 @@ class RoomAllocation(BaseModel):
 
 
 @app.post("/allocate-room/")
-def allocate_room(application_id: int):
+def allocate_room(application_id: int,rooms_id:int):
     db = SessionLocal()
     try:
         # Get application to check room_type
-        app_query = applications.select().where(applications.c.id == application_id)
+        app_query = applications.select().where(applications.c.id == application_id,rooms.c.room_id == rooms_id) 
         app_data = db.execute(app_query).fetchone()
         if not app_data:
             raise HTTPException(status_code=404, detail="Application not found")
@@ -170,6 +176,7 @@ def login(data: AdminData):
             admin.c.Password == data.Password
         )
         result = db.execute(query).fetchone()
+
         if result:
             return {"message": "Login successful"}
         else:
@@ -315,3 +322,51 @@ def fetch_accepted_applications():
         raise HTTPException(status_code=400, detail=str(e))
     finally:
         db.close()
+
+@app.get("/application/{application_id}")
+def get_application_by_id(application_id: int):
+    db = SessionLocal()
+    try:
+        query = applications.select().where(applications.c.id == application_id)
+        result = db.execute(query).fetchone()
+        if result:
+            app_dict = dict(result._mapping)
+            # Set status to "Pending" if it is None or empty
+            if not app_dict.get("status"):
+                app_dict["status"] = "Pending"
+            return {"application": app_dict}
+        else:
+            raise HTTPException(status_code=404, detail="Application not found")
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    finally:
+        db.close()
+
+
+
+
+@app.get("/application/{application_id}/pdf")
+def download_application_pdf(application_id: int):
+    db = SessionLocal()
+    try:
+        query = applications.select().where(applications.c.id == application_id)
+        result = db.execute(query).fetchone()
+        if not result:
+            raise HTTPException(status_code=404, detail="Application not found")
+
+        buffer = io.BytesIO()
+        p = canvas.Canvas(buffer, pagesize=letter)
+        y = 750
+        p.setFont("Helvetica", 12)
+        p.drawString(100, y, f"Application ID: {result.id}")
+        y -= 20
+        for field in result._mapping:
+            p.drawString(100, y, f"{field}: {getattr(result, field)}")
+            y -= 20
+        p.save()
+        buffer.seek(0)
+        return StreamingResponse(buffer, media_type="application/pdf", headers={
+            "Content-Disposition": f"attachment; filename=application_{application_id}.pdf"
+        })
+    finally:
+        db.close()        

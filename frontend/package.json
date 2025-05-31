@@ -11,12 +11,18 @@
   },
   "dependencies": {
     "@ant-design/v5-patch-for-react-19": "^1.0.3",
+    "@react-pdf/renderer": "^4.3.0",
     "antd": "^5.25.2",
     "axios": "^1.9.0",
+    "file-saver": "^2.0.5",
+    "file-server": "^2.2.1",
+    "html2js": "^0.2.0",
+    "jspdf": "^3.0.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-helmet": "^6.1.0",
-    "react-router-dom": "^7.6.0"
+    "react-router-dom": "^7.6.0",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",
