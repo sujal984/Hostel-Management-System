@@ -38,11 +38,15 @@ function ApplicationForm({ title }) {
   const [showResult, setShowResult] = useState(null);
   const navigate = useNavigate();
 
-  const today = dayjs();
+   const today = dayjs();
   const maxDate = today.subtract(18, "year");
 
   const disabledDate = (current) => {
-    return !current || current > today;
+    return (
+      !current || 
+      
+      current > today
+    );
   };
   const Continue = (values) => {
     setFormData((prev) => ({ ...prev, ...values }));
@@ -66,6 +70,7 @@ function ApplicationForm({ title }) {
   };
 
   const handleSubmit = async () => {
+
     try {
       const values1 = await form1.validateFields();
       const values2 = await form2.validateFields();
@@ -79,7 +84,7 @@ function ApplicationForm({ title }) {
         status: vStatus,
         ...filteredValues
       } = { ...values1, ...values2, ...values3 };
-
+      
       const payload = { ...filteredFormData, ...filteredValues };
       await axios.post(
         `${import.meta.env.VITE_API_URL}${Endpoint.submitapplication}`,
@@ -118,6 +123,10 @@ function ApplicationForm({ title }) {
   };
   return (
     <>
+      <Helmet>
+        <title>{title}</title>
+      </Helmet>
+
       <Row
         justify="center"
         align="middle"
@@ -130,6 +139,7 @@ function ApplicationForm({ title }) {
               {showResult === "success" && (
                 <Result
                   status="success"
+                  // className="status-result"
                   style={{ height: "100%" }}
                   title="Application Submitted Successfully"
                   extra={[
@@ -159,6 +169,7 @@ function ApplicationForm({ title }) {
                 <div style={{ height: "100%" }}>
                   <Result
                     status="error"
+                    // className="status-result"
                     title="Application Submitted Failed!"
                     subTitle={errMessage}
                     style={{ height: "100%" }}
@@ -192,7 +203,6 @@ function ApplicationForm({ title }) {
                   <StepForms stepNo={stepNo} className="step-indicator" />
                   {stepNo === 0 && (
                     <Form
-                      requiredMark={false}
                       name="personalinfo"
                       layout="vertical"
                       className="responsive-form"
@@ -258,11 +268,13 @@ function ApplicationForm({ title }) {
                             required: true,
                             message: "Please input your date of birth",
                           },
+                          
                         ]}
                       >
                         <DatePicker
                           style={{ width: "100%" }}
-                          disabledDate={disabledDate}
+                        disabledDate={disabledDate}
+                        
                         />
                       </Form.Item>
                       <Form.Item>
@@ -285,7 +297,6 @@ function ApplicationForm({ title }) {
 
                   {stepNo === 1 && (
                     <Form
-                      requiredMark={false}
                       name="educationinfo"
                       layout="vertical"
                       size="large"
@@ -353,7 +364,6 @@ function ApplicationForm({ title }) {
 
                   {stepNo === 2 && (
                     <Form
-                      requiredMark={false}
                       name="requirement"
                       layout="vertical"
                       size="large"

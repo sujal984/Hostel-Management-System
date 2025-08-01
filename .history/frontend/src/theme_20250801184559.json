@@ -1,0 +1,69 @@
+{
+  "token": {
+    "colorPrimary": "#3b82f6",
+    "colorInfo": "#2563eb",
+    "colorSuccess": "#22c55e",
+    "colorWarning": "#facc15",
+    "colorError": "#ef4444",
+
+    "colorTextBase": "#1e293b",
+    "colorBgBase": "#f8fafc",
+    "colorBgContainer": "#ffffff",
+
+    "fontFamily": "Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif",
+    "fontSize": 14,
+
+    "borderRadius": 8,
+    "colorBorder": "#e2e8f0",
+    "colorTextPlaceholder": "#94a3b8"
+  },
+
+  "components": {
+    "Button": {
+      "controlHeight": 40,
+      "colorPrimaryHover": "#2563eb",
+      "colorPrimaryActive": "#1d4ed8"
+    },
+    "Table": {
+      "colorBgContainer": "#ffffff",
+      "colorBorderSecondary": "#e5e7eb",
+      "headerBg": "#f1f5f9",
+      "headerColor": "#0f172a"
+    },
+    "Form": {
+      "labelColor": "#334155",
+      "colorText": "#1e293b"
+    },
+    "Input": {
+      "controlHeight": 50,
+      "paddingInline": 16,
+      "paddingBlock": 10,
+      "borderRadius": 10,
+      "colorBgContainer": "#ffffff",
+      "colorBorder": "#cbd5e1",
+      "colorText": "#0f172a"
+    },
+    "Steps": {
+      "colorPrimary": "#3b82f6",
+      "colorSplit": "#e2e8f0"
+    },
+    "Result": {
+      "titleFontSize": 24,
+      "subtitleFontSize": 16,
+      "colorText": "#334155"
+    },
+    "Link": {
+      "colorText": "#2563eb",
+      "colorTextHover": "#1d4ed8",
+      "colorTextActive": "#1e40af"
+    },
+    "Card": {
+      "colorBgContainer": "#ffffff",
+      "boxShadow": "0 4px 12px rgba(0, 0, 0, 0.05)",
+      "borderRadius": 12,
+      "padding": 24,
+      "headerFontSize": 18,
+      "colorTextHeading": "#0f172a"
+    }
+  }
+}

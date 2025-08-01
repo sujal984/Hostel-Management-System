@@ -130,6 +130,7 @@ function ApplicationForm({ title }) {
               {showResult === "success" && (
                 <Result
                   status="success"
+                  // className="status-result"
                   style={{ height: "100%" }}
                   title="Application Submitted Successfully"
                   extra={[
@@ -159,6 +160,7 @@ function ApplicationForm({ title }) {
                 <div style={{ height: "100%" }}>
                   <Result
                     status="error"
+                    // className="status-result"
                     title="Application Submitted Failed!"
                     subTitle={errMessage}
                     style={{ height: "100%" }}
@@ -192,7 +194,6 @@ function ApplicationForm({ title }) {
                   <StepForms stepNo={stepNo} className="step-indicator" />
                   {stepNo === 0 && (
                     <Form
-                      requiredMark={false}
                       name="personalinfo"
                       layout="vertical"
                       className="responsive-form"
@@ -285,7 +286,6 @@ function ApplicationForm({ title }) {
 
                   {stepNo === 1 && (
                     <Form
-                      requiredMark={false}
                       name="educationinfo"
                       layout="vertical"
                       size="large"
@@ -353,7 +353,6 @@ function ApplicationForm({ title }) {
 
                   {stepNo === 2 && (
                     <Form
-                      requiredMark={false}
                       name="requirement"
                       layout="vertical"
                       size="large"

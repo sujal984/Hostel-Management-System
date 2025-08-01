@@ -120,6 +120,9 @@ function TrackStatus({ title }) {
   };
   return (
     <>
+      <Helmet>
+        <title>{title}</title>
+      </Helmet>
       <Row
         justify="center"
         align="middle"

@@ -169,6 +169,10 @@ function ApplicationDetail({ title }) {
 
   return (
     <>
+      <Helmet>
+        <title>{title}</title>
+      </Helmet>
+
       <div style={{ padding: 24 }}>
         <Button
           type="link"

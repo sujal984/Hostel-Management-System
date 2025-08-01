@@ -1,0 +1,404 @@
+/* Global Styles */
+/* Ensure box-sizing is consistent across all elements */
+/* 
+
+
+.ant-table-measure-row {
+    display: none !important;
+} */
+
+html,
+body,
+#root {
+    height: 100%;
+    /* Ensures the root elements take full height */
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+    /* Recommended font for a modern look */
+}
+
+* {
+    box-sizing: border-box;
+    /* Include padding and border in the element's total width and height */
+}
+
+/* Container for centering content on the page, like login forms or status pages */
+.center-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f5f7fa;
+    /* Light background for the page */
+    padding: 24px;
+    /* Default padding around the centered content */
+    min-height: 100vh;
+    /* Ensures the container takes at least the full viewport height */
+}
+
+/* Styled Card for forms and main content areas */
+/* Apply this class to Ant Design Card components for consistent styling */
+.app-card {
+    border-radius: 16px;
+    /* Rounded corners for a modern feel */
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+    /* Subtle shadow for depth */
+    background: #fff;
+    /* White background for the card */
+    width: 100%;
+    /* Card takes full width of its parent column/container */
+    max-width: 550px;
+    /* Default maximum width for cards on larger screens */
+    padding: 24px;
+    /* Default internal padding for card content */
+}
+
+/* Responsive Form Layout */
+/* Apply this class to Ant Design Form components within your cards */
+.responsive-form {
+    width: 100%;
+    /* Form takes full width within its container */
+    margin: 0 auto;
+    /* Centers the form horizontally if its container is wider than its max-width */
+}
+
+/* Common Title Styling for Forms/Pages */
+.form-title {
+    margin-top: 1rem;
+    text-align: center;
+    margin-bottom: 24px !important;
+    /* Ensures consistent bottom margin */
+    font-size: 28px !important;
+    /* Default font size for titles */
+}
+
+/* Full Width Button Class */
+/* Apply this class to Ant Design Button components that should span full width */
+.full-width-btn {
+    width: 100%;
+}
+
+/* Responsive Table Container */
+/* Wrap your Ant Design Table components with a div having this class */
+.responsive-table {
+    overflow-x: auto;
+    /* Enables horizontal scrolling for tables on small screens */
+    width: 100%;
+    /* Ensures the table container uses available width */
+}
+
+/* Action buttons below tables (e.g., in AdminDashboard) */
+.table-actions {
+    display: flex;
+    gap: 16px;
+    /* Space between buttons */
+    justify-content: center;
+    /* Center the buttons */
+    margin-top: 8px;
+}
+
+/* Form Steps Indicator (e.g., in ApplicationForm) */
+.step-indicator {
+    margin-bottom: 32px;
+    text-align: center;
+}
+
+/* Application Status Result Display */
+.status-result {
+    min-height: 60px;
+    /* Ensures a minimum height for the status message area */
+    text-align: center;
+    margin-top: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    word-break: break-word;
+    /* Prevents text overflow for long status messages by breaking words */
+    padding: 0 8px;
+    /* Small horizontal padding to prevent text touching edges */
+}
+
+/* Admin Dashboard Header Buttons */
+/* Apply this class to the div containing the Logout and Accepted Applications buttons in AdminDashboard.jsx */
+.admin-dashboard-header-buttons {
+    display: flex;
+    gap: 16px;
+    position: absolute;
+    /* Position relative to the nearest positioned ancestor (body/viewport) */
+    top: 24px;
+    right: 24px;
+    z-index: 1;
+    /* Ensures buttons are above other content */
+}
+
+/* Application Form Navigation Buttons (Back/Continue/Submit) */
+/* Apply this class to the Ant Design Space component wrapping these buttons in ApplicationForm.jsx */
+.form-navigation-buttons {
+    width: 100%;
+    justify-content: space-between;
+}
+
+/* Specific styling for the Card component in TrackStatus.jsx */
+/* Apply this class in addition to 'app-card' to the Card in TrackStatus.jsx */
+/* Example: <Card className="app-card track-status-card"> */
+.track-status-card {
+    /* Adjust max-width specifically for the Track Status card if it needs to be different */
+    max-width: 600px;
+}
+
+/* Media Queries for responsiveness */
+
+/* Extra Small devices (phones in portrait, max-width: 480px) */
+@media (max-width: 480px) {
+    .center-container {
+        padding: 12px;
+        /* Reduced padding for very small screens */
+    }
+
+    .app-card {
+        padding: 16px;
+        /* Reduced card internal padding */
+    }
+
+    .form-title {
+        font-size: 22px !important;
+        /* Smaller title font size on small screens */
+        margin-bottom: 12px !important;
+    }
+
+    /* Adjust Ant Design Table cell padding and font size for small screens */
+    .ant-table-thead>tr>th,
+    .ant-table-tbody>tr>td {
+        padding: 8px !important;
+        font-size: 12px;
+    }
+
+    .table-actions {
+        flex-direction: column;
+        /* Stack buttons vertically */
+        gap: 8px;
+        /* Smaller gap between stacked buttons */
+    }
+
+    .table-actions .ant-btn {
+        width: 100%;
+        /* Make buttons full width when stacked */
+    }
+
+    /* Admin Dashboard Header Buttons for small screens */
+    .admin-dashboard-header-buttons {
+        position: static;
+        /* Remove absolute positioning to flow with content */
+        flex-direction: column;
+        /* Stack buttons */
+        width: 100%;
+        /* Full width */
+        padding: 0 16px 16px;
+        /* Add some padding */
+        align-items: flex-start;
+        /* Align buttons to the left */
+        gap: 8px;
+        /* Smaller gap */
+    }
+
+    .admin-dashboard-header-buttons .ant-btn {
+        width: 100%;
+        /* Make buttons full width when stacked */
+    }
+
+    /* Track Status Card and Button adjustments for extra small screens */
+    .track-status-card {
+        padding: 24px !important;
+        /* Ensure adequate padding for this specific card */
+    }
+
+    .track-status-card .ant-btn {
+        margin-left: 0 !important;
+        /* Remove left margin for back home button */
+        width: 100%;
+        /* Make back home button full width */
+    }
+
+    /* Application Form Navigation Buttons for extra small screens */
+    .form-navigation-buttons {
+        flex-direction: column;
+        /* Stack buttons */
+        gap: 12px;
+        /* Gap between stacked buttons */
+    }
+
+    .form-navigation-buttons .ant-btn {
+        width: 100% !important;
+        /* Make buttons full width */
+    }
+}
+
+/* Small devices (phones in landscape to tablets, 481px to 768px) */
+@media (min-width: 481px) and (max-width: 768px) {
+    .center-container {
+        padding: 16px;
+    }
+
+    .app-card {
+        padding: 20px;
+        max-width: 650px;
+        /* Wider cards for tablets */
+    }
+
+    .form-title {
+        font-size: 24px !important;
+    }
+
+    .ant-table-thead>tr>th,
+    .ant-table-tbody>tr>td {
+        padding: 12px !important;
+        font-size: 13px;
+    }
+
+    /* Admin Dashboard Header Buttons for medium screens */
+    .admin-dashboard-header-buttons {
+        position: static;
+        /* Remove absolute positioning */
+        flex-direction: row;
+        /* Keep buttons in a row */
+        width: 100%;
+        /* Full width */
+        justify-content: flex-end;
+        /* Align to the right */
+        padding: 0 16px 16px;
+        /* Add padding */
+    }
+
+    .admin-dashboard-header-buttons .ant-btn {
+        width: auto;
+        /* Allow buttons to size naturally */
+    }
+
+    /* Track Status Card and Button adjustments for small devices */
+    .track-status-card {
+        padding: 28px !important;
+    }
+
+    .track-status-card .ant-btn {
+        margin-left: auto !important;
+        /* Center button */
+        margin-right: auto !important;
+        display: block;
+        /* Make it a block element to center with margin auto */
+        width: fit-content;
+        /* Adjust width to content */
+    }
+
+    /* Application Form Navigation Buttons for small devices */
+    .form-navigation-buttons {
+        flex-direction: row;
+        /* Keep buttons in a row */
+    }
+
+    .form-navigation-buttons .ant-btn {
+        width: 120px !important;
+        /* Restore original width */
+    }
+}
+
+/* Medium devices (tablets in landscape to small desktops, 769px to 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .center-container {
+        padding: 24px;
+    }
+
+    .app-card {
+        padding: 24px;
+        max-width: 750px;
+        /* Even wider cards */
+    }
+
+    .form-title {
+        font-size: 26px !important;
+    }
+
+    .ant-table-thead>tr>th,
+    .ant-table-tbody>tr>td {
+        padding: 16px !important;
+        font-size: 14px;
+    }
+
+    /* Admin Dashboard Header Buttons for larger tablets/small desktops */
+    .admin-dashboard-header-buttons {
+        position: absolute;
+        /* Restore absolute positioning */
+        flex-direction: row;
+        top: 24px;
+        right: 24px;
+        width: auto;
+        padding: 0;
+    }
+
+    .admin-dashboard-header-buttons .ant-btn {
+        width: auto;
+    }
+
+    /* Track Status Card and Button adjustments for medium devices */
+    .track-status-card {
+        padding: 32px !important;
+    }
+
+    .track-status-card .ant-btn {
+        margin-left: 9rem !important;
+        /* Restore original margin */
+        width: auto;
+    }
+
+    /* Application Form Navigation Buttons */
+    .form-navigation-buttons .ant-btn {
+        width: 120px !important;
+    }
+}
+
+/* Large devices (desktops, 1025px and up) */
+@media (min-width: 1025px) {
+    .center-container {
+        padding: 32px;
+    }
+
+    .app-card {
+        padding: 32px;
+        max-width: 800px;
+        /* Largest max-width for cards */
+    }
+
+    .form-title {
+        font-size: 28px !important;
+    }
+
+    .ant-table-thead>tr>th,
+    .ant-table-tbody>tr>td {
+        padding: 20px !important;
+        font-size: 14px;
+    }
+
+    /* Admin Dashboard Header Buttons */
+    .admin-dashboard-header-buttons {
+        position: absolute;
+        flex-direction: row;
+        top: 24px;
+        right: 24px;
+        width: auto;
+        padding: 0;
+    }
+
+    .admin-dashboard-header-buttons .ant-btn {
+        width: auto;
+    }
+
+    /* Track Status Card and Button adjustments for large devices */
+    .track-status-card .ant-btn {
+        /* margin-left: 9rem !important; */
+        width: auto;
+    }
+
+    /* Application Form Navigation Buttons */
+    .form-navigation-buttons .ant-btn {
+        width: 120px !important;
+    }
+}

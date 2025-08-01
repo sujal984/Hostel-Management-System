@@ -353,7 +353,6 @@ function ApplicationForm({ title }) {
 
                   {stepNo === 2 && (
                     <Form
-                      requiredMark={false}
                       name="requirement"
                       layout="vertical"
                       size="large"

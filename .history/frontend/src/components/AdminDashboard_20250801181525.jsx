@@ -219,8 +219,11 @@ function AdminDashboard({ title }) {
   };
   return (
     <>
+      <Helmet>
+        <title>{title}</title>
+      </Helmet>
       <div style={{ padding: 20 }}>
-        <div className="flex justify-between">
+        <div className="admin-dashboard-header-buttons">
           <Button color="green" onClick={handleAcceptedApplications}>
             Accepted Applications
           </Button>

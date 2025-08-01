@@ -12,6 +12,7 @@
   "dependencies": {
     "@ant-design/v5-patch-for-react-19": "^1.0.3",
     "@react-pdf/renderer": "^4.3.0",
+    "@tailwindcss/vite": "^4.1.11",
     "antd": "^5.25.2",
     "axios": "^1.9.0",
     "file-saver": "^2.0.5",
@@ -22,6 +23,7 @@
     "react-dom": "^19.1.0",
     "react-helmet": "^6.1.0",
     "react-router-dom": "^7.6.0",
+    "tailwindcss": "^4.1.11",
     "xlsx": "^0.18.5"
   },
   "devDependencies": {

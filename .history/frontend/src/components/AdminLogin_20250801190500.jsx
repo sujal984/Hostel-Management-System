@@ -3,7 +3,7 @@ import FormItem from "antd/es/form/FormItem";
 import Input from "antd/es/input/Input";
 import { useState, useEffect } from "react";
 import { Result } from "antd";
-
+import { Helmet } from "react-helmet";
 import { Endpoint } from "../constant/Endpoint";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -50,7 +50,7 @@ function AdminLogin({ title }) {
   };
   return (
     <>
-      <div className="h-full flex justify-center items-center">
+      <div className="h-full">
         <Card
           className="app-card"
           style={{

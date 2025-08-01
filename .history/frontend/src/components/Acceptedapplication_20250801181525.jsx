@@ -44,6 +44,9 @@ function AcceptedApplication({ title }) {
 
   return (
     <>
+      <Helmet>
+        <title>{title}</title>
+      </Helmet>
       <Title level={3} className="form-title">
         Accepted Applications
       </Title>

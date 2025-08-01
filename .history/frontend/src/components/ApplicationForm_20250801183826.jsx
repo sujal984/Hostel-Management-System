@@ -192,7 +192,6 @@ function ApplicationForm({ title }) {
                   <StepForms stepNo={stepNo} className="step-indicator" />
                   {stepNo === 0 && (
                     <Form
-                      requiredMark={false}
                       name="personalinfo"
                       layout="vertical"
                       className="responsive-form"
@@ -285,7 +284,6 @@ function ApplicationForm({ title }) {
 
                   {stepNo === 1 && (
                     <Form
-                      requiredMark={false}
                       name="educationinfo"
                       layout="vertical"
                       size="large"
@@ -353,7 +351,6 @@ function ApplicationForm({ title }) {
 
                   {stepNo === 2 && (
                     <Form
-                      requiredMark={false}
                       name="requirement"
                       layout="vertical"
                       size="large"

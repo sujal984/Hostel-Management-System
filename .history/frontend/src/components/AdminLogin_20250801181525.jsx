@@ -3,7 +3,7 @@ import FormItem from "antd/es/form/FormItem";
 import Input from "antd/es/input/Input";
 import { useState, useEffect } from "react";
 import { Result } from "antd";
-
+import { Helmet } from "react-helmet";
 import { Endpoint } from "../constant/Endpoint";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -20,7 +20,7 @@ function AdminLogin({ title }) {
     }
   }, [navigate]);
   const handleLogin = async (values) => {
-    console.log("run");
+    console.log('run')
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}${Endpoint.adminlogin}`,
@@ -50,7 +50,11 @@ function AdminLogin({ title }) {
   };
   return (
     <>
-      <div className="h-full flex justify-center items-center">
+      <Helmet>
+        <title>{title}</title>
+      </Helmet>
+
+      <div className="center-container" style={{ height: "100vh" }}>
         <Card
           className="app-card"
           style={{

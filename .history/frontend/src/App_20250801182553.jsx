@@ -1,10 +1,9 @@
 import ProtectedRoute from "./components/ProtectedRoute";
-
 import { WithHelmet } from "./helper/WithHelmet";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { ROUTES } from "./constant/ROUTE";
 import Page404 from "./components/Page404";
-// import "./App.css";
+import "./App.css";
 
 function App() {
   const isAdminLoggedIn = localStorage.getItem("admin_logged_in") === "true";

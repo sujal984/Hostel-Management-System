@@ -194,7 +194,7 @@ function ApplicationForm({ title }) {
                     <Form
                       requiredMark={false}
                       name="personalinfo"
-                      layout="vertical"
+                      // layout="vertical"
                       className="responsive-form"
                       size="large"
                       form={form1}

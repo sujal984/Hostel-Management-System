@@ -169,6 +169,9 @@ function Temporary({ title }) {
 
   return (
     <>
+      <Helmet>
+        <title>{title}</title>
+      </Helmet>
       <Row justify="center">
         <Col>
           <Card
