@@ -14,7 +14,7 @@ from reportlab.pdfgen import canvas
 from fastapi.middleware.cors import CORSMiddleware
 
 DATABASE_URL = "postgresql://postgres:postgres@localhost:5432/Hostel-Management-System"
-
+# DATABASE_URL = os.getenv("DATABASE_URL")
 engine = create_engine(DATABASE_URL)
 metadata = MetaData()
 
