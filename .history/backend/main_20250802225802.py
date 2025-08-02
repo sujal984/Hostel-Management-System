@@ -1,11 +1,10 @@
-from sqlite3 import OperationalError
 import uvicorn
 from fastapi import FastAPI ,HTTPException
-
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from sqlalchemy import create_engine, Column, Integer,ForeignKey,DateTime, String,  Table, MetaData
 from sqlalchemy.orm import sessionmaker
-from datetime import datetime, time
+from datetime import datetime
 import os
 import io
 from fastapi import Query
@@ -15,12 +14,12 @@ from reportlab.pdfgen import canvas
 from fastapi.middleware.cors import CORSMiddleware
 
 # DATABASE_URL = "postgresql://postgres:postgres@localhost:5432/Hostel-Management-System"
-
 DATABASE_URL = os.getenv("DATABASE_URL")
 engine = create_engine(DATABASE_URL)
 metadata = MetaData()
 
 # Get database URL from environment
+DATABASE_URL = os.getenv("DATABASE_URL")
 
 # Fix common Render database URL issues
 if DATABASE_URL:
