@@ -12,7 +12,7 @@ function StepForms({ stepNo }) {
       title: "Requirement",
     },
   ];
-  return <Steps current={stepNo} items={steps} />;
+  return <Steps current={stepNo} items={steps} className="!p-4 ]" />;
 }
 
 export default StepForms;

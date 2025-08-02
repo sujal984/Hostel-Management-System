@@ -1,27 +1,11 @@
-import {
-  Button,
-  message,
-  Table,
-  Typography,
-  Space,
-  Popconfirm,
-  Pagination,
-  Descriptions,
-  Tooltip,
-} from "antd";
+import { Button, message, Table, Space, Popconfirm } from "antd";
 
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Helmet } from "react-helmet";
 import { useNavigate } from "react-router-dom";
 import { Endpoint } from "../constant/Endpoint";
 
-import CaretRightOutlined from "@ant-design/icons/CaretRightOutlined";
-import CaretDownOutlined from "@ant-design/icons/CaretDownOutlined";
-
-const { Title } = Typography;
-
-function AdminDashboard({ title }) {
+function AdminDashboard() {
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState([]);
   const navigate = useNavigate();
@@ -159,108 +143,40 @@ function AdminDashboard({ title }) {
     },
   ];
 
-  const expandedRowRender = (record) => {
-    const expandableData = [
-      { label: "Email", value: record.email },
-      { label: "Mobile", value: record.number },
-      { label: "Status", value: record.status },
-      { label: "Remark", value: record.remark },
-    ];
-    return (
-      <Descriptions bordered column={1} size="small" style={{ width: "30%" }}>
-        {expandableData.map((item, index) => (
-          <Descriptions.Item label={item.label} key={index}>
-            {item.value || "-"}
-          </Descriptions.Item>
-        ))}
-      </Descriptions>
-    );
-  };
-  const expandableConfig = {
-    expandedRowRender,
-    expandIcon: ({ expanded, onExpand, record }) =>
-      expanded ? (
-        <CaretDownOutlined onClick={(e) => onExpand(record, e)} />
-      ) : (
-        <>
-          <Tooltip
-            title={record.status}
-            style={{
-              title:
-                record.status === "Accepted"
-                  ? { color: "green" }
-                  : { color: "red" },
-            }}
-          >
-            <CaretRightOutlined onClick={(e) => onExpand(record, e)} />
-          </Tooltip>
-        </>
-      ),
-    rowExpandable: (record) => record.name && record.email,
-    defaultExpandAllRows: false,
-    expandRowByClick: true,
-  };
-
   const handleLogout = () => {
     localStorage.removeItem("admin_logged_in");
-    setTimeout(() => {
-      navigate("/Admin/login", { replace: true });
-    }, 100);
-    useEffect(() => {
-      navigate("/Admin/login", { replace: true });
-    });
+    // setTimeout(() => {
+    //   navigate("/Admin/login", { replace: true });
+
+    navigate("/Admin/login", { replace: true });
   };
   const pageSize = 8;
   const paginatedData = applications
     .filter((app) => app && app.name && app.email && app.number)
     .slice((current - 1) * pageSize, current * pageSize);
-  const handlePageChange = (page) => {
-    setCurrent(page);
-  };
+
   return (
     <>
-      <div style={{ padding: 20 }}>
-        <div className="flex justify-between">
-          <Button color="green" onClick={handleAcceptedApplications}>
+      <div className=" !p-4">
+        <div className="flex justify-between !p-4">
+          <Button type="primary" onClick={handleAcceptedApplications}>
             Accepted Applications
           </Button>
-          <Button type="primary" danger onClick={handleLogout}>
+          <Button type="primary" danger onClick={() => handleLogout()}>
             Logout
           </Button>
         </div>
-        <Title level={3} className="form-title">
-          All Applications
-        </Title>
 
         <div>
           <Table
-            className="responsive-table"
-            expandable={expandableConfig}
             columns={columns}
             dataSource={paginatedData}
             rowKey={(record) => record.id || record.email + record.name}
             bordered
-            pagination={false}
+            scroll={{ x: true }}
+            pagination={{}} //have to fix this pagination
           />
         </div>
-        <Pagination
-          style={{
-            position: "static",
-            right: 0,
-            marginTop: 16,
-            marginRight: 0,
-            marginBottom: 5,
-            marginLeft: "82.5rem",
-          }}
-          defaultCurrent={1}
-          hideOnSinglePage={true}
-          pageSize={pageSize}
-          total={applications.length}
-          showTotal={(total, range) => `${range[0]}-${range[1]} of ${total}`}
-          size="small"
-          onChange={handlePageChange}
-          current={current}
-        />
       </div>
     </>
   );

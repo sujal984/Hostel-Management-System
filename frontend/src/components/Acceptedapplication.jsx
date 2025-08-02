@@ -2,10 +2,11 @@ import { Button, Table, Typography } from "antd";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { Helmet } from "react-helmet";
+
 import { Endpoint } from "../constant/Endpoint";
-const { Title } = Typography;
-function AcceptedApplication({ title }) {
+import { ROUTES } from "../constant/ROUTE";
+
+function AcceptedApplication() {
   const [applications, setApplications] = useState([]);
   const navigate = useNavigate();
   const fetchApplications = async () => {
@@ -44,27 +45,25 @@ function AcceptedApplication({ title }) {
 
   return (
     <>
-      <Title level={3} className="form-title">
-        Accepted Applications
-      </Title>
-      <div>
-        <Button
-          onClick={() => navigate("/Admin/dashboard")}
-          type="primary"
-          style={{ marginLeft: "1rem", marginBottom: "1rem" }}
-        >
-          Back
-        </Button>
-      </div>
-      <div className="responsive-table">
-        <Table
-          columns={columns}
-          dataSource={applications}
-          rowKey={(record) => record.id || record.email + record.name}
-          bordered
-          pagination={{ pageSize: 8 }}
-          scroll={{ x: true }}
-        />
+      <div className="!p-4 flex flex-col gap-4">
+        <div>
+          <Button
+            onClick={() => navigate(ROUTES.Admin_Dashborad.path)}
+            type="primary"
+          >
+            Back
+          </Button>
+        </div>
+        <div>
+          <Table
+            columns={columns}
+            dataSource={applications}
+            rowKey={(record) => record.id || record.email + record.name}
+            bordered
+            pagination={{ pageSize: 8 }}
+            scroll={{ x: true }}
+          />
+        </div>
       </div>
     </>
   );

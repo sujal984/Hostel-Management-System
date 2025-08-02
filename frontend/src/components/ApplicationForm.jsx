@@ -4,10 +4,6 @@ import {
   Input,
   Button,
   Select,
-  Card,
-  Row,
-  Col,
-  Space,
   Typography,
   message,
   Result,
@@ -15,16 +11,13 @@ import {
 import { useFormContext } from "./FormContext";
 import { useState } from "react";
 import StepForms from "./StepForms";
-import { Helmet } from "react-helmet";
+
 import dayjs from "dayjs";
-// import FormItem from "antd/es/form/F
-// ormItem";
+
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { Endpoint } from "../constant/Endpoint";
-
-const { Title } = Typography;
 
 function ApplicationForm({ title }) {
   const [stepNo, setStepNo] = useState(0);
@@ -71,7 +64,6 @@ function ApplicationForm({ title }) {
       const values2 = await form2.validateFields();
       const values3 = await form3.validateFields();
 
-      // Remove id, room_number, and status if present
       const { id, room_number, status, ...filteredFormData } = formData;
       const {
         id: vId,
@@ -118,29 +110,54 @@ function ApplicationForm({ title }) {
   };
   return (
     <>
-      <Row
-        justify="center"
-        align="middle"
-        className="center-container"
-        style={{ height: "100vh" }}
-      >
-        <Col xs={24} sm={20} md={16} lg={12} xl={10}>
-          <Card className="app-card">
-            <Form.Provider>
-              {showResult === "success" && (
+      <div className="container !mx-auto flex justify-center self-center h-screen">
+        <div className="flex justify-center flex-col max-w-[450px] !p-5">
+          <Form.Provider>
+            {showResult === "success" && (
+              <Result
+                status="success"
+                style={{ height: "100%" }}
+                title="Application Submitted Successfully"
+                extra={[
+                  <>
+                    <Button
+                      onClick={() => {
+                        handletryagain();
+                      }}
+                      variant="solid"
+                    >
+                      Submit Another Response
+                    </Button>
+                    <Button
+                      type="primary"
+                      variant="solid"
+                      onClick={() => {
+                        navigate("/user/application/status");
+                      }}
+                    >
+                      Track your Application
+                    </Button>
+                  </>,
+                ]}
+              />
+            )}
+            {showResult === "error" && (
+              <div style={{ height: "100%" }}>
                 <Result
-                  status="success"
+                  status="error"
+                  title="Application Submitted Failed!"
+                  subTitle={errMessage}
                   style={{ height: "100%" }}
-                  title="Application Submitted Successfully"
                   extra={[
                     <>
                       <Button
+                        variant="solid"
+                        danger
                         onClick={() => {
                           handletryagain();
                         }}
-                        variant="solid"
                       >
-                        Submit Another Response
+                        Try Again!
                       </Button>
                       <Button
                         type="primary"
@@ -154,55 +171,27 @@ function ApplicationForm({ title }) {
                     </>,
                   ]}
                 />
-              )}
-              {showResult === "error" && (
-                <div style={{ height: "100%" }}>
-                  <Result
-                    status="error"
-                    title="Application Submitted Failed!"
-                    subTitle={errMessage}
-                    style={{ height: "100%" }}
-                    extra={[
-                      <>
-                        <Button
-                          variant="solid"
-                          danger
-                          onClick={() => {
-                            handletryagain();
-                          }}
-                        >
-                          Try Again!
-                        </Button>
-                        <Button
-                          type="primary"
-                          variant="solid"
-                          onClick={() => {
-                            navigate("/user/application/status");
-                          }}
-                        >
-                          Track your Application
-                        </Button>
-                      </>,
-                    ]}
+              </div>
+            )}
+            {showResult === null && (
+              <>
+                <div className="flex justify-center">
+                  <img
+                    src="/ChatGPT Image May 22, 2025, 12_02_14 PM.png"
+                    className="w-[100px] h-[100px]"
                   />
                 </div>
-              )}
-              {showResult === null && (
-                <>
-                  <StepForms stepNo={stepNo} className="step-indicator" />
-                  {stepNo === 0 && (
+                <StepForms stepNo={stepNo} />
+                {stepNo === 0 && (
+                  <>
                     <Form
                       requiredMark={false}
                       name="personalinfo"
                       layout="vertical"
-                      className="responsive-form"
                       size="large"
                       form={form1}
                       onFinish={Continue}
                     >
-                      <Title level={3} className="form-title">
-                        Personal Information
-                      </Title>
                       <Form.Item
                         label="Name"
                         name="name"
@@ -270,209 +259,193 @@ function ApplicationForm({ title }) {
                           Continue
                         </Button>
                       </Form.Item>
-                      {/* <FormItem>
-                      <div style={{ textAlign: "center", marginTop: ".3rem" }}>
-                        <Button onClick={onclick}>Admin ?</Button>
-                      </div>
-                    </FormItem> */}
                       <p style={{ textDecoration: "none" }}>
                         <Link to="/User/Application/status">
                           Already Applied ? Track Your Application
                         </Link>
                       </p>
                     </Form>
-                  )}
+                  </>
+                )}
 
-                  {stepNo === 1 && (
-                    <Form
-                      requiredMark={false}
-                      name="educationinfo"
-                      layout="vertical"
-                      size="large"
-                      form={form2}
-                      className="responsive-form"
-                      initialValues={formData}
-                      onFinish={Continue}
+                {stepNo === 1 && (
+                  <Form
+                    requiredMark={false}
+                    name="educationinfo"
+                    layout="vertical"
+                    size="large"
+                    form={form2}
+                    className="responsive-form"
+                    initialValues={formData}
+                    onFinish={Continue}
+                  >
+                    <Form.Item label="Degree" name="degree">
+                      <Select
+                        placeholder="Select Degree"
+                        style={{ width: "auto" }}
+                        popupMatchSelectWidth={false}
+                        allowClear
+                        // onChange={handleChange}
+                        options={[
+                          { value: "bachelour", label: "Bachelour" },
+                          { value: "masters", label: "Masters" },
+                          { value: "phd", label: "Phd" },
+                          { value: "diploma", label: "Diploma" },
+                        ]}
+                      />
+                    </Form.Item>
+                    <Form.Item
+                      label="University"
+                      name="uni_name"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please input your University Name!",
+                        },
+                      ]}
                     >
-                      <Title level={3} className="form-title">
-                        Education Details
-                      </Title>
-                      <Form.Item label="Degree" name="degree">
-                        <Select
-                          placeholder="Select Degree"
-                          style={{ width: "auto" }}
-                          popupMatchSelectWidth={false}
-                          allowClear
-                          // onChange={handleChange}
-                          options={[
-                            { value: "bachelour", label: "Bachelour" },
-                            { value: "masters", label: "Masters" },
-                            { value: "phd", label: "Phd" },
-                            { value: "diploma", label: "Diploma" },
-                          ]}
-                        />
-                      </Form.Item>
-                      <Form.Item
-                        label="University"
-                        name="uni_name"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please input your University Name!",
-                          },
-                        ]}
-                      >
-                        <Input placeholder="Enter university name" />
-                      </Form.Item>
-                      <Form.Item
-                        label="College"
-                        name="clg_name"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please input your College Name!",
-                          },
-                        ]}
-                      >
-                        <Input placeholder="Enter college name" />
-                      </Form.Item>
-                      <Space className="form-navigation-buttons">
-                        <Button onClick={prev} style={{ width: 120 }}>
-                          Back
-                        </Button>
-                        <Button
-                          type="primary"
-                          htmlType="submit"
-                          style={{ width: 120 }}
-                        >
-                          Continue
-                        </Button>
-                      </Space>
-                    </Form>
-                  )}
-
-                  {stepNo === 2 && (
-                    <Form
-                      requiredMark={false}
-                      name="requirement"
-                      layout="vertical"
-                      size="large"
-                      form={form3}
-                      onFinish={handleSubmit}
-                      initialValues={formData}
-                      className="responsive-form"
+                      <Input placeholder="Enter university name" />
+                    </Form.Item>
+                    <Form.Item
+                      label="College"
+                      name="clg_name"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please input your College Name!",
+                        },
+                      ]}
                     >
-                      <Title level={3} className="form-title">
-                        Room Requirement
-                      </Title>
-                      <Form.Item
-                        label="Room Type"
-                        name="room_type"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please Select Your Prefer Room Type",
-                          },
-                        ]}
+                      <Input placeholder="Enter college name" />
+                    </Form.Item>
+                    <div className="flex justify-between">
+                      <Button onClick={prev} style={{ width: 120 }}>
+                        Back
+                      </Button>
+                      <Button
+                        type="primary"
+                        htmlType="submit"
+                        style={{ width: 120 }}
                       >
-                        <Select
-                          placeholder="Select Room Type"
-                          style={{ width: "auto" }}
-                          popupMatchSelectWidth={false}
-                          allowClear
-                          // onChange={onChange}
-                          options={[
-                            { value: "single", label: "Single" },
-                            { value: "double", label: "Double" },
-                            { value: "triple", label: "Triple" },
-                          ]}
-                        />
-                      </Form.Item>
-                      <Form.Item
-                        label="Start Duration"
-                        name="start_date"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please Select Your Start Date",
-                          },
-                        ]}
-                      >
-                        <DatePicker
-                          style={{ width: "100%" }}
-                          onChange={() => {
-                            setEnddt("fill");
-                          }}
-                          disabledDate={(current) =>
-                            current && current < new Date().setHours(0, 0, 0, 0)
-                          }
-                        />
-                      </Form.Item>
+                        Continue
+                      </Button>
+                    </div>
+                  </Form>
+                )}
 
-                      <Form.Item
-                        label="End  Duration"
-                        name="end_date"
-                        dependencies={["start_date"]}
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please Select Your End Date",
-                          },
-                          ({ getFieldValue }) => ({
-                            validator(_, value) {
-                              const start = getFieldValue("start_date");
-                              if (!value || !start) return Promise.resolve();
-                              if (!value.isAfter(start, "day")) {
-                                return Promise.reject(
-                                  new Error(
-                                    "End date should be greater than start date"
-                                  )
-                                );
-                              }
-                              return Promise.resolve();
-                            },
-                          }),
+                {stepNo === 2 && (
+                  <Form
+                    requiredMark={false}
+                    name="requirement"
+                    layout="vertical"
+                    size="large"
+                    form={form3}
+                    onFinish={handleSubmit}
+                    initialValues={formData}
+                    className="responsive-form"
+                  >
+                    <Form.Item
+                      label="Room Type"
+                      name="room_type"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please Select Your Prefer Room Type",
+                        },
+                      ]}
+                    >
+                      <Select
+                        placeholder="Select Room Type"
+                        style={{ width: "auto" }}
+                        popupMatchSelectWidth={false}
+                        allowClear
+                        // onChange={onChange}
+                        options={[
+                          { value: "single", label: "Single" },
+                          { value: "double", label: "Double" },
+                          { value: "triple", label: "Triple" },
                         ]}
-                      >
-                        <DatePicker
-                          style={{ width: "100%" }}
-                          disabled={enddt === "empty"}
-                          disabledDate={(current) => {
-                            const start = form3.getFieldValue("start_date");
-                            if (!start)
-                              return (
-                                current &&
-                                current < new Date().setHours(0, 0, 0, 0)
-                              );
-                            return current && current <= start.startOf("day");
-                          }}
-                        />
-                      </Form.Item>
-                      <Space
-                        style={{
-                          width: "100%",
-                          justifyContent: "space-between",
+                      />
+                    </Form.Item>
+                    <Form.Item
+                      label="Start Duration"
+                      name="start_date"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please Select Your Start Date",
+                        },
+                      ]}
+                    >
+                      <DatePicker
+                        style={{ width: "100%" }}
+                        onChange={() => {
+                          setEnddt("fill");
                         }}
+                        disabledDate={(current) =>
+                          current && current < new Date().setHours(0, 0, 0, 0)
+                        }
+                      />
+                    </Form.Item>
+
+                    <Form.Item
+                      label="End  Duration"
+                      name="end_date"
+                      dependencies={["start_date"]}
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please Select Your End Date",
+                        },
+                        ({ getFieldValue }) => ({
+                          validator(_, value) {
+                            const start = getFieldValue("start_date");
+                            if (!value || !start) return Promise.resolve();
+                            if (!value.isAfter(start, "day")) {
+                              return Promise.reject(
+                                new Error(
+                                  "End date should be greater than start date"
+                                )
+                              );
+                            }
+                            return Promise.resolve();
+                          },
+                        }),
+                      ]}
+                    >
+                      <DatePicker
+                        style={{ width: "100%" }}
+                        disabled={enddt === "empty"}
+                        disabledDate={(current) => {
+                          const start = form3.getFieldValue("start_date");
+                          if (!start)
+                            return (
+                              current &&
+                              current < new Date().setHours(0, 0, 0, 0)
+                            );
+                          return current && current <= start.startOf("day");
+                        }}
+                      />
+                    </Form.Item>
+                    <div className="flex justify-between">
+                      <Button onClick={prev} style={{ width: 120 }}>
+                        Back
+                      </Button>
+                      <Button
+                        type="primary"
+                        htmlType="submit"
+                        style={{ width: 120 }}
                       >
-                        <Button onClick={prev} style={{ width: 120 }}>
-                          Back
-                        </Button>
-                        <Button
-                          type="primary"
-                          htmlType="submit"
-                          style={{ width: 120 }}
-                        >
-                          Submit
-                        </Button>
-                      </Space>
-                    </Form>
-                  )}
-                </>
-              )}
-            </Form.Provider>
-          </Card>
-        </Col>
-      </Row>
+                        Submit
+                      </Button>
+                    </div>
+                  </Form>
+                )}
+              </>
+            )}
+          </Form.Provider>
+        </div>
+      </div>
     </>
   );
 }

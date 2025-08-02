@@ -4,7 +4,6 @@ import { WithHelmet } from "./helper/WithHelmet";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { ROUTES } from "./constant/ROUTE";
 import Page404 from "./components/Page404";
-// import "./App.css";
 
 function App() {
   const isAdminLoggedIn = localStorage.getItem("admin_logged_in") === "true";
@@ -14,11 +13,7 @@ function App() {
       {Object.values(ROUTES).map((route) => {
         const withHelmetComponent = WithHelmet(route.component, route.title);
         const Component = withHelmetComponent;
-
-        // console.log(route.title);
-
         if (route.path === "/Admin/login") {
-          // If logged in and on /Admin/login, redirect manually to dashboard
           if (isAdminLoggedIn) {
             return (
               <Route

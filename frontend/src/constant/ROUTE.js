@@ -18,6 +18,7 @@ export const ROUTES = {
     component: AdminLogin,
     title: "Admin Login",
     heading: "Admin Login",
+    description: "Its a  admin login page",
   },
   Tracking: {
     path: "/User/Application/status",

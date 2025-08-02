@@ -8,9 +8,7 @@ import { Endpoint } from "../constant/Endpoint";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const { Title } = Typography;
-
-function AdminLogin({ title }) {
+function AdminLogin() {
   const [showResult, setShowResult] = useState(false);
   const [form] = Form.useForm();
   const navigate = useNavigate();
@@ -50,15 +48,8 @@ function AdminLogin({ title }) {
   };
   return (
     <>
-      <div className="h-full flex justify-center items-center">
-        <Card
-          className="app-card"
-          style={{
-            minWidth: 350,
-            maxWidth: 400,
-            margin: "0 auto",
-          }}
-        >
+      <div className="h-screen flex justify-center items-center ">
+        <div className=" md:min-w-[400px] !p-5">
           {showResult ? (
             <Result
               status="error"
@@ -72,17 +63,19 @@ function AdminLogin({ title }) {
             />
           ) : (
             <>
-              <Title
-                level={3}
-                className="form-title"
-                style={{ marginBottom: 32 }}
-              >
+              <div className="flex justify-center">
+                <img
+                  src="/ChatGPT Image May 22, 2025, 12_02_14 PM.png"
+                  className="w-[100px] h-[100px]"
+                />
+              </div>
+              <h1 className="text-4xl text-center font-medium !m-4">
                 Admin Login
-              </Title>
+              </h1>
               <Form
                 layout="vertical"
                 onFinish={handleLogin}
-                className="responsive-form"
+                requiredMark={false}
                 form={form}
               >
                 <FormItem
@@ -110,9 +103,8 @@ function AdminLogin({ title }) {
                   <Button
                     htmlType="submit"
                     type="primary"
-                    className="full-width-btn"
                     size="large"
-                    style={{ marginTop: 8 }}
+                    className="!w-full"
                   >
                     Login
                   </Button>
@@ -120,7 +112,7 @@ function AdminLogin({ title }) {
               </Form>
             </>
           )}
-        </Card>
+        </div>
       </div>
     </>
   );
