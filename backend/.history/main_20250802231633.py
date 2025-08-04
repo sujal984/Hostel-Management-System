@@ -13,17 +13,7 @@ from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from fastapi.middleware.cors import CORSMiddleware
 
-# DATABASE_URL = "postgresql://postgres:postgres@localhost:5432/Hostel-Management-System"
-DATABASE_URL = 'postgresql://neondb_owner:npg_7gGJsOXV1eRb@ep-small-brook-ad84n7e5-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require'
-
-app = FastAPI()
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+DATABASE_URL = "postgresql://postgres:postgres@localhost:5432/Hostel-Management-System"
 
 engine = create_engine(DATABASE_URL)
 metadata = MetaData()
