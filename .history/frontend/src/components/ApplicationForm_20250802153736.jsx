@@ -77,7 +77,6 @@ function ApplicationForm({ title }) {
         `${import.meta.env.VITE_API_URL}${Endpoint.submitapplication}`,
         payload
       );
-
       message.success("Application Submitted successfully");
       setShowResult("success");
     } catch (error) {
@@ -103,7 +102,7 @@ function ApplicationForm({ title }) {
       }
     }
   };
-  console.log(import.meta.env.VITE_API_URL);
+
   const handletryagain = () => {
     reset();
     setFormData({});

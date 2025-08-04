@@ -415,8 +415,3 @@ def download_application_pdf(application_id: int):
         })
     finally:
         db.close()        
-
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)       
