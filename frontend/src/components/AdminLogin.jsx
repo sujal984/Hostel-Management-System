@@ -86,26 +86,28 @@ function AdminLogin() {
                 >
                   <Input placeholder="Enter your username" size="large" />
                 </FormItem>
-                <FormItem
-                  label="Password"
-                  name="Password"
-                  rules={[
-                    { required: true, message: "Please Enter Your Password" },
-                  ]}
-                  className="relative"
-                >
-                  <Input.Password
-                    placeholder="Enter your password"
-                    size="large"
-                  />
+                <div className="relative">
+                  <FormItem
+                    label="Password"
+                    name="Password"
+                    rules={[
+                      { required: true, message: "Please Enter Your Password" },
+                    ]}
+                    className="relative"
+                  >
+                    <Input.Password
+                      placeholder="Enter your password"
+                      size="large"
+                    />
+                  </FormItem>
                   <Button
                     type="link"
                     href="/forgot"
-                    className="!absolute top-10 right-0 !pr-0 opacity-70"
+                    className="!absolute top-18 right-0 !pr-0 opacity-70"
                   >
                     Forgot Password ?
                   </Button>
-                </FormItem>
+                </div>
                 <FormItem>
                   <Button
                     htmlType="submit"

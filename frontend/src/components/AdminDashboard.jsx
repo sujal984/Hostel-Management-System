@@ -150,7 +150,7 @@ function AdminDashboard() {
 
     navigate("/Admin/login", { replace: true });
   };
-  const pageSize = 8;
+  const [pageSize, setPageSize] = useState(8);
   const paginatedData = applications
     .filter((app) => app && app.name && app.email && app.number)
     .slice((current - 1) * pageSize, current * pageSize);
@@ -170,11 +170,25 @@ function AdminDashboard() {
         <div>
           <Table
             columns={columns}
-            dataSource={paginatedData}
+            dataSource={applications.filter(
+              (app) => app && app.name && app.email && app.number
+            )}
+            // dataSource={paginatedData}
             rowKey={(record) => record.id || record.email + record.name}
             bordered
             scroll={{ x: true }}
-            pagination={{}} //have to fix this pagination
+            pagination={{
+              current: current,
+              pageSize: pageSize,
+              pageSizeOptions: ["5", "8", "10", "20", "50"],
+              showSizeChanger: true,
+              onChange: (current, pageSize) => {
+                setPageSize(pageSize);
+                setCurrent(current);
+              },
+              showTotal: (total, range) =>
+                `${range[0]}-${range[1]} of ${total} items`,
+            }}
           />
         </div>
       </div>
