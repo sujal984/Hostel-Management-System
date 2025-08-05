@@ -302,12 +302,9 @@ function ApplicationDetail({ title }) {
                   ))}
                 </Select>
                 {availableRooms.length === 0 && (
-                  <Text
-                    type="danger"
-                    style={{ display: "block", marginTop: 8 }}
-                  >
+                  <h1 style={{ display: "block", marginTop: 8, color: "red" }}>
                     No available rooms matching the application requirements
-                  </Text>
+                  </h1>
                 )}
               </div>
 
